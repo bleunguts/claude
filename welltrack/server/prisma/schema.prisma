@@ -1,0 +1,12 @@
+// Prisma schema for the WellTrack server. Models are added in task 1.2 — this
+// file currently only wires up the datasource/generator.
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
