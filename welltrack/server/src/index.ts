@@ -1,12 +1,6 @@
-import express from "express";
+import { app } from "./app.js";
+import { config } from "./config/index.js";
 
-const app = express();
-const port = process.env.PORT ?? 3000;
-
-app.get("/", (_req, res) => {
-  res.send("WellTrack API");
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(config.PORT, () => {
+  console.log(`Server listening on port ${config.PORT}`);
 });

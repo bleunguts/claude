@@ -7,7 +7,7 @@ import globals from "globals";
 // imports this and layers on its own environment-specific globals.
 export default tseslint.config(
   {
-    ignores: ["**/dist/**", "**/build/**", "**/node_modules/**", "**/.vite/**"],
+    ignores: ["**/dist/**", "**/build/**", "**/node_modules/**", "**/.vite/**", "**/generated/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

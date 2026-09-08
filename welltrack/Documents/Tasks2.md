@@ -18,12 +18,12 @@ schema and auth middleware exist.
 - [x] Create the repo structure: `server/` and `client/` as separate packages (keeps deploy targets independent)
 - [x] Init `server/` as Node.js + Express with TypeScript; add `tsx`/`ts-node-dev` for hot reload
 - [x] Add ESLint + Prettier with a shared config, and a `npm run lint` script that CI can call
-- [ ] Add a `docker-compose.yml` with a PostgreSQL service so every dev gets the same local database
-- [ ] Install and init Prisma; point `DATABASE_URL` at the local PostgreSQL instance
-- [ ] Create `.env.example` listing every required variable: `DATABASE_URL`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, token TTLs, SMTP/email provider keys, `CLIENT_URL`
-- [ ] Add a config module that reads `process.env` once at boot and throws on missing required vars (fail fast, not at first request)
-- [ ] Set up the folder layout: `routes/`, `controllers/`, `services/`, `middleware/`, `validators/`, `prisma/`
-- [ ] Add a `GET /api/health` endpoint returning `200` plus a database connectivity check
+- [x] Add a `docker-compose.yml` with a PostgreSQL service so every dev gets the same local database
+- [x] Install and init Prisma; point `DATABASE_URL` at the local PostgreSQL instance
+- [x] Create `.env.example` listing every required variable: `DATABASE_URL`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, token TTLs, SMTP/email provider keys, `CLIENT_URL`
+- [x] Add a config module that reads `process.env` once at boot and throws on missing required vars (fail fast, not at first request)
+- [x] Set up the folder layout: `routes/`, `controllers/`, `services/`, `middleware/`, `validators/`, `prisma/`
+- [x] Add a `GET /api/health` endpoint returning `200` plus a database connectivity check
 
 ### 1.2 Database schema
 
