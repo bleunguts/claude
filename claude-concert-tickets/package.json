@@ -1,0 +1,13 @@
+{
+  "name": "claude-concert-tickets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Concert ticket listings with a details page and a cookie-backed cart, backed by SQLite. No frameworks, no dependencies.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

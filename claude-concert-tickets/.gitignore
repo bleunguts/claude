@@ -1,0 +1,9 @@
+# Generated on first run by db.js
+tickets.db
+tickets.db-journal
+tickets.db-wal
+tickets.db-shm
+
+node_modules/
+.DS_Store
+Thumbs.db

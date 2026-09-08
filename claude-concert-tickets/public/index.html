@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Available concert tickets</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/">Concert&nbsp;tickets</a>
+        <a class="cart-link" href="/cart.html">
+          Cart <span class="pill" id="cart-count">0</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <h1>Available tickets</h1>
+      <p class="tagline">Upcoming shows, live availability. Pick one for details.</p>
+
+      <form class="filters" id="filters" role="search" autocomplete="off">
+        <div class="field field--grow">
+          <label for="search">Search</label>
+          <input type="search" id="search" placeholder="Artist or venue" />
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <select id="city"></select>
+        </div>
+        <div class="field">
+          <label for="sort">Sort by</label>
+          <select id="sort">
+            <option value="date">Date (soonest)</option>
+            <option value="price">Price (lowest)</option>
+            <option value="artist">Artist (A–Z)</option>
+          </select>
+        </div>
+      </form>
+
+      <p class="result-count" id="result-count" aria-live="polite"></p>
+      <ul class="listings" id="listings"></ul>
+      <p class="empty" id="empty" hidden>No concerts match those filters.</p>
+    </main>
+
+    <script type="module" src="/js/list.js"></script>
+  </body>
+</html>

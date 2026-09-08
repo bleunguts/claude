@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Details</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <a class="logo" href="/tickets">Ticket<span>Hub</span></a>
+    <a class="cart-link" href="/cart">
+      Cart <span class="cart-badge" id="cart-badge">0</span>
+    </a>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tickets">&larr; Back to all events</a>
+    <div id="details-container">
+      <p class="loading">Loading event...</p>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="/common.js"></script>
+  <script src="/details.js"></script>
+</body>
+</html>

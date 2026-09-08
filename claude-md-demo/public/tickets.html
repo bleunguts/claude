@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concert Tickets</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <a class="logo" href="/tickets">Ticket<span>Hub</span></a>
+    <a class="cart-link" href="/cart">
+      Cart <span class="cart-badge" id="cart-badge">0</span>
+    </a>
+  </header>
+
+  <main>
+    <h1>Upcoming Concerts</h1>
+    <div id="tickets-grid" class="grid">
+      <p class="loading">Loading events...</p>
+    </div>
+  </main>
+
+  <script src="/common.js"></script>
+  <script src="/tickets.js"></script>
+</body>
+</html>

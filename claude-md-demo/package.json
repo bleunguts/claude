@@ -1,0 +1,15 @@
+{
+  "name": "concert-tickets-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prototype concert ticket storefront (CLAUDE.md demo)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2"
+  }
+}
