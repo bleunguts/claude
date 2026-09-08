@@ -1,0 +1,243 @@
+{
+  "name": "Daily Checkouts II",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        160
+      ],
+      "id": "c223f7b5-3c96-4512-b3db-8155612807e9",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6616ef52-f2ea-4c7d-bfb6-51bbc4fdfd62",
+              "name": "events",
+              "value": "=={{ JSON.stringify($json._embedded.events.map(e => ({ name: e.name, date: e.dates.start.localDate, time: e.dates.start.localTime, venue: e._embedded?.venues?.[0]?.name, area: e._embedded?.venues?.[0]?.address?.line1 }))) }}",
+              "type": "string"
+            },
+            {
+              "id": "1baba9a8-cf4f-4d9b-8e4e-f6ccb4aa76ca",
+              "name": "today",
+              "value": "=={{ $now.toFormat('cccc d MMM') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        160
+      ],
+      "id": "806f6555-ab49-4f7b-9d3d-e737a4cdf562",
+      "name": "Edit Fields",
+      "alwaysOutputData": true,
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "fromEmail": "zz_zzzz@yahoo.com",
+        "toEmail": "zz_zzzz@yahoo.com",
+        "subject": "=Your day - {{ $now.toFormat('cccc d MMM') }}",
+        "html": "=={{\"<html><body style='font-family:Arial,sans-serif;font-size:14px;max-width:520px;margin:20px auto;padding:16px;color:#333;line-height:1.8'>\" + $json.content[0].text.replace(/\\n/g, \"<br>\") + \"</body></html>\"}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        160
+      ],
+      "id": "61493dd7-d405-40dd-964c-ac9f16f480e2",
+      "name": "Send an Email",
+      "webhookId": "e1f09a87-823b-4c94-9e29-3335cf1076a7",
+      "credentials": {
+        "smtp": {
+          "id": "SqMglLgfOkfuBnJ1",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"x-api-key\": \"YOUR_ANTHROPIC_API_KEY\",\n  \"anthropic-version\": \"2023-06-01\",\n  \"content-type\": \"application/json\"\n}",
+        "sendBody": true,
+        "contentType": "=json",
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={{\n{\n  model: \"claude-sonnet-4-5\",\n  max_tokens: 1000,\n  messages: [\n    {\n      role: \"user\",\n      content: `You are a calm daily filter for someone who is ADHD, spontaneous, based in London, values work-life balance and not burning out.\n\nToday is ${$json.today}.\n\nTASKS:\n${$json.tasks}\n\nLONDON EVENTS (next 4 days):\n${$json.events}\n\nNEWS:\n${$json.news}\n\nReturn exactly this:\n\nTODAY: 1-2 events happening today. Priority: Latin/reggaeton/Brazilian/Spanish events or social events with a 30s-40s crowd. Otherwise anything spontaneous and low-effort in central London.\n\nSQUIRREL PICK: 1 wildcard event this week that fits any of these: reggaeton, Latin music, Brazilian culture, Spanish-speaking events, or genuine social mixing with 30s/40s crowd. If nothing fits, pick something culturally fascinating and unexpected.\n\nTHIS WEEKEND: 1-2 events Fri/Sat/Sun worth loosely having in mind. No commitment needed.\n\nPROTECT YOUR ENERGY: 1-2 tasks max that actually matter today. Drop the rest.\n\nIGNORE: Everything else in one line.\n\nInclude event name, day, time, and area. Be direct and warm. No waffle.`\n    }\n  ]\n}\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        272,
+        160
+      ],
+      "id": "3c76b7d1-9bbd-4994-9ddf-21d32d544ed6",
+      "name": "Anthropic Query",
+      "alwaysOutputData": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "url": "=https://app.ticketmaster.com/discovery/v2/events.json?city=London&countryCode=GB&startDateTime=2026-04-19T00:00:00Z&endDateTime=2026-04-23T23:59:59Z&size=20&apikey=cvMADpzB3MD3S6Hja9dKrr6EBH9m4Vby",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -112,
+        160
+      ],
+      "id": "51b3c4b7-8cd6-44e4-903c-9641073c12ff",
+      "name": "Fetch Ticketmaster"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.ticketmaster.com/discovery/v2/events.json?keyword=Malaga&startDateTime=2026-04-19T00:00:00Z&endDateTime=2026-09-30T23:59:59Z&size=10&apikey=cvMADpzB3MD3S6Hja9dKrr6EBH9m4Vby",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -112,
+        384
+      ],
+      "id": "192d4534-4d97-4538-b9b5-2aadbd1cd032",
+      "name": "HTTP Request Malaga"
+    },
+    {
+      "parameters": {
+        "url": "https://app.ticketmaster.com/discovery/v2/events.json?keyword=Granada&startDateTime=2026-04-19T00:00:00Z&endDateTime=2026-09-30T23:59:59Z&size=10&apikey=cvMADpzB3MD3S6Hja9dKrr6EBH9m4Vby",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        384
+      ],
+      "id": "a1f9520c-d486-4132-bd25-2f425612c290",
+      "name": "HTTP Request Granada"
+    },
+    {
+      "parameters": {
+        "url": "https://app.ticketmaster.com/discovery/v2/events.json?keyword=Madrid&startDateTime=2026-04-19T00:00:00Z&endDateTime=2026-09-30T23:59:59Z&size=10&apikey=cvMADpzB3MD3S6Hja9dKrr6EBH9m4Vby",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        272,
+        384
+      ],
+      "id": "9122847d-e20a-4356-be08-1154c3fb7341",
+      "name": "HTTP Request Madrid"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Fetch Ticketmaster",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request Malaga",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Anthropic Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Query": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Ticketmaster": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Malaga": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Granada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Granada": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Madrid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "087fa7dd-445b-47ae-8986-40b4a72acdfd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44ebd02f216c7dcb6124927ad7b1778ce5e8e0acf9d6619061783dfeae08dd62"
+  },
+  "id": "lMLeYCQl9c4iGwf3",
+  "tags": []
+}

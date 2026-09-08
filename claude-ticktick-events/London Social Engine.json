@@ -1,0 +1,855 @@
+{
+  "name": "London Social Engine",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e1c63527-4aa2-4c6a-9031-a1e68cbb016b",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        704,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.timeout.com/london/things-to-do/things-to-do-in-london-this-week",
+        "options": {}
+      },
+      "id": "7898942f-06e5-4c1d-a390-2a8e3961ee64",
+      "name": "TimeOut",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1200,
+        -336
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://feverup.com/en/london",
+        "options": {}
+      },
+      "id": "0dd779c0-1d27-4dc8-95e3-ea0fe8f95bba",
+      "name": "FeverUp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1168,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.meetup.com/home/?suggested=true&source=EVENTS",
+        "options": {}
+      },
+      "id": "d40f8b31-6d35-4664-a0b4-207f12b80409",
+      "name": "Meetup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        736,
+        1280
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.internations.org/events/mine#invitations",
+        "options": {}
+      },
+      "id": "9bae0d7c-e2e0-4c15-9eea-fb6e47910270",
+      "name": "InterNations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        736,
+        1088
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.latinolife.co.uk/what-is-on",
+        "options": {}
+      },
+      "id": "2991833f-eca8-4586-b732-382d539f1fbc",
+      "name": "LatinoLife",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1200,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://dice.fm/venue/jungla-london-bbakv?lng=en",
+        "options": {}
+      },
+      "id": "720f4068-9076-4fe2-a826-55472ef340ca",
+      "name": "Jungla",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1392,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.latin-candy.co.uk/",
+        "options": {}
+      },
+      "id": "a1fd367b-19fa-4e1b-b7a1-be2071511aaf",
+      "name": "Latin Candy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1184,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://egglondon.co.uk/events/",
+        "options": {}
+      },
+      "id": "8091caf5-93ec-4e6e-b470-f3ff1426b872",
+      "name": "Egg London",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1376,
+        -624
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.electricbrixton.uk.com/events/",
+        "options": {}
+      },
+      "id": "3901a695-86d1-4770-9069-c2efc44529ba",
+      "name": "Electric Brixton",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1488,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.eventbrite.com/d/united-kingdom--london/",
+        "options": {}
+      },
+      "id": "0e434f2d-e7af-4e18-bc92-5b64499afdf0",
+      "name": "Eventbrite",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        736,
+        1488
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.thepostbar.co.uk/",
+        "options": {}
+      },
+      "id": "80815f4d-a431-4df1-a10f-3accc29d6ae8",
+      "name": "The Post Bar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1392,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.bfi.org.uk/whats-on",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\",\n  \"Accept\": \"text/html\"\n}",
+        "options": {}
+      },
+      "id": "88fc32e1-862e-4e14-976a-ac5de4490c04",
+      "name": "BFI Southbank",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1408,
+        832
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://princecharlescinema.com/whats-on/",
+        "options": {}
+      },
+      "id": "e6956ac0-988f-4fce-98c5-c0891c6be4de",
+      "name": "Prince Charles Cinema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1392,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.thegardencinema.co.uk/",
+        "options": {}
+      },
+      "id": "3722881b-1cfc-4604-a8e3-e210bd4a1d3e",
+      "name": "Garden Cinema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1616,
+        1712
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.etceteratheatrecamden.com/events",
+        "options": {}
+      },
+      "id": "c0a96566-6396-4f6e-9d47-8be02613251d",
+      "name": "Etcetera Theatre",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1616,
+        1376
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.thelionandunicorntheatre.com/whats-on",
+        "options": {}
+      },
+      "id": "134a8c13-b85c-49c6-bead-33c2922f66b9",
+      "name": "Lion & Unicorn",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1616,
+        1536
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://hootanannybrixton.co.uk/",
+        "options": {}
+      },
+      "id": "959d33ca-98d4-447b-b89e-f04632c6f274",
+      "name": "Hootananny Brixton",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1408,
+        992
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"x-api-key\": \"YOUR_ANTHROPIC_API_KEY\",\n  \"anthropic-version\": \"2023-06-01\",\n  \"content-type\": \"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { model: \"claude-haiku-4-5-20251001\", max_tokens: 1000, messages: [ { role: \"user\", content: `You are a London cultural discovery engine curating a balanced weekly life map. Expand input into discoveries, don't summarize.\n\n# MANDATORY OUTPUT (ALL 5 SECTIONS)\n\n## 🔥 TODAY (6-8 items)\nMax 3 nightlife, min 1 culture, min 1 low-energy\n\n## 🐿️ SQUIRREL PICKS (4-6 items)\nWeird/niche/unexpected. Max 2 nightlife.\n\n## 🛋️ LOW ENERGY (5-7 items)\nCinema/film, exhibitions/museums/talks, calm spaces, low-effort experiences\n\n## 🍸 WEEKEND (5-7 items)\nMin 1 nightlife, 1 cultural, 1 daytime. Feel like a real weekend plan.\n\n## ✨ BONUS STRIP (10-14 items)\nMix: culture, nightlife, chill, food, weird. No nightlife clustering.\n\n# CORE RULES\n\n**Balance:** Nightlife max 40% | Culture min 20% | Chill min 15% | Food/social min 10%\n\n**No reuse:** Each event appears in ONE section only\n\n**Expand, don't compress:** \n- Curated lists (TimeOut/Fever/Metro) → extract 3-8 distinct items\n- Venue listings → extract all events with dates this week\n- Articles → extract 2+ cultural themes/insights + actionable items\n- Trending → extract 2-4 \"happening now\" moments\n\n**Never:**\n- Omit sections\n- Collapse to \"top picks\"\n- Reduce output due to similarity\n- Ignore narrative content\n\n# FORMAT (EVERY ITEM)\n\nTitle | Venue | 1-2 line description | Source (URL/domain)\n\n# TONE\n\nEditorial London guide: playful, slightly chaotic, discovery-first. Make London feel alive and layered.\n\nDATA:\n${JSON.stringify($json, null, 2)}` } ] } }}",
+        "options": {}
+      },
+      "id": "e09bcde9-c818-4b9e-9b12-48c7ad9d30ac",
+      "name": "Claude Brain",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        3552,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(i => {\n  return {\n    json: {\n      raw: i.json\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        608
+      ],
+      "id": "2378fcb4-4ba4-4b25-a41f-d6d6120f7be4",
+      "name": "Normalize Code"
+    },
+    {
+      "parameters": {
+        "numberInputs": 8
+      },
+      "id": "83040838-353e-4cf0-a2a6-097848b65c81",
+      "name": "Merge A",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1824,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "id": "11e06d68-6e30-40e9-870e-3d69d4c48070",
+      "name": "Merge B",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1856,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = [];\n\nfunction extractSource(content) {\n  if (!content) return \"unknown\";\n\n  const str = typeof content === \"string\" ? content : JSON.stringify(content);\n\n  const canonicalMatch = str.match(/<link[^>]*rel=[\"']?canonical[\"']?[^>]*href=[\"'](.*?)[\"']/i);\n  if (canonicalMatch && canonicalMatch[1]) {\n    const url = canonicalMatch[1].trim();\n    const domain = url.match(/https?:\\/\\/(www\\.)?([^\\/]+)/i);\n    return domain ? domain[2] : url;\n  }\n\n  const titleMatch = str.match(/<title[^>]*>(.*?)<\\/title>/i);\n  if (titleMatch && titleMatch[1]) {\n    return titleMatch[1].trim();\n  }\n\n  const domainMatch = str.match(/https?:\\/\\/(www\\.)?([^\\/\\s]+)/i);\n  if (domainMatch && domainMatch[2]) {\n    return domainMatch[2];\n  }\n\n  return \"unknown\";\n}\n\nfunction extractTitle(str) {\n  const m = str.match(/<title[^>]*>(.*?)<\\/title>/i);\n  if (m) return m[1].trim();\n\n  const h1 = str.match(/<h1[^>]*>(.*?)<\\/h1>/i);\n  return h1 ? h1[1].trim() : \"\";\n}\n\nfunction extractSubtitle(str) {\n  const meta = str.match(/<meta[^>]*name=[\"']description[\"'][^>]*content=[\"'](.*?)[\"']/i);\n  if (meta) return meta[1].trim();\n\n  const og = str.match(/<meta[^>]*property=[\"']og:description[\"'][^>]*content=[\"'](.*?)[\"']/i);\n  return og ? og[1].trim() : \"\";\n}\n\nfunction extractSnippet(html) {\n  if (!html) return \"\";\n\n  let text = html\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \"\")\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \"\")\n    .replace(/<nav[\\s\\S]*?<\\/nav>/gi, \"\")\n    .replace(/<footer[\\s\\S]*?<\\/footer>/gi, \"\")\n    .replace(/<header[\\s\\S]*?<\\/header>/gi, \"\")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n\n  // aggressive junk removal\n  const junkPatterns = [\n    \"skip to content\",\n    \"buy tickets\",\n    \"read more\",\n    \"facetwp\",\n    \"all live events\",\n    \"home\",\n    \"menu\",\n    \"cookie\",\n    \"accept cookies\",\n    \"google-site-verification\",\n    \"top of page\",\n    \"reset\"\n  ];\n\n  for (const j of junkPatterns) {\n    text = text.replace(new RegExp(j, \"gi\"), \"\");\n  }\n\n  text = text.replace(/\\s+/g, \" \").trim();\n\n  // split into sentences\n  const sentences = text\n    .split(\".\")\n    .map(s => s.trim())\n    .filter(s =>\n      s.length > 25 &&\n      !junkPatterns.some(j => s.toLowerCase().includes(j))\n    );\n\n  return sentences.slice(0, 3).join(\". \").slice(0, 350);\n}\n\nfunction extractDate(str = \"\") {\n  if (!str) return \"\";\n\n  const patterns = [\n    // Wed, 22 Apr / Wed 22 Apr / Wed 22 April\n    /\\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,?\\s?\\d{1,2}\\s?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\b/i,\n\n    // 22 Apr 2026 / 22 Apr / 22 April 2026\n    /\\b\\d{1,2}\\s?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?\\s?\\d{0,4}\\b/i,\n\n    // Apr 22 / April 22\n    /\\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?\\s\\d{1,2}\\b/i,\n\n    // Friday 12 / Sat 25\n    /\\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\\s\\d{1,2}\\b/i,\n\n    // ISO-ish: 2026-04-22\n    /\\b\\d{4}-\\d{2}-\\d{2}\\b/,\n\n    // “22nd April”, “1st May”\n    /\\b\\d{1,2}(st|nd|rd|th)\\s?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\b/i,\n\n    // Time-bound phrases (weak signal but better than empty)\n    /\\b(today|tonight|this weekend|this friday|next friday|this sunday)\\b/i,\n  ];\n\n  for (const p of patterns) {\n    const match = str.match(p);\n    if (match) return match[0];\n  }\n\n  return \"\";\n}\n\nfunction extractVenue(str) {\n  const venues = [\"Brixton\", \"Soho\", \"Camden\", \"Shoreditch\", \"Hackney\", \"Islington\"];\n  for (const v of venues) {\n    if (str.includes(v)) return v;\n  }\n  return \"\";\n}\n\nfor (const item of items) {\n  const content = item.json.raw?.data ?? item.json.raw ?? item.json;\n  const str = typeof content === \"string\" ? content : JSON.stringify(content);\n\n  clean.push({\n    source: extractSource(str),\n    title: extractTitle(str),\n    subtitle: extractSubtitle(str),\n    snippet: extractSnippet(str),\n    date: extractDate(str),\n    venue: extractVenue(str),    \n    content: str // keep raw for now (useful for debugging/filter node)\n  });\n}\n\nreturn [\n  {\n    json: {\n      data: clean\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        608
+      ],
+      "id": "fd5f2270-e0de-499b-bb7a-566c8c63113b",
+      "name": "Collect All Data"
+    },
+    {
+      "parameters": {
+        "fromEmail": "zz_zzzz@yahoo.com",
+        "toEmail": "zz_zzzz@yahoo.com",
+        "subject": "=Your day - {{ $now.toFormat('cccc d MMM') }}",
+        "html": "=={{\"<html><body style='font-family:Arial,sans-serif;font-size:14px;max-width:520px;margin:20px auto;padding:16px;color:#333;line-height:1.8'>\" + $json.content[0].text.replace(/\\n/g, \"<br>\") + \"</body></html>\"}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3728,
+        608
+      ],
+      "id": "2872fa38-fdab-4548-9fb8-7addc4712c63",
+      "name": "Send an Email",
+      "webhookId": "7508aaac-1306-426b-b6c2-b62851980b0f",
+      "credentials": {
+        "smtp": {
+          "id": "SqMglLgfOkfuBnJ1",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = items.map(item => ({\n  section: item.json.section,\n  source: item.json.source || \"unknown\",\n  title: item.json.title || \"\",\n  subtitle: item.json.subtitle || \"\",\n  snippet: item.json.snippet || \"\",\n  date: item.json.date || \"\",\n  venue: item.json.venue || \"\",\n  price: item.json.price || \"\"\n}));\n\nreturn [\n  {\n    json: {\n      totalExtracted: results.length,\n      results\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3536,
+        896
+      ],
+      "id": "94322c97-5b53-46ad-8a36-889180b15587",
+      "name": "Debug Dump"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2080,
+        608
+      ],
+      "id": "d0575806-0e24-44e0-875c-2d42c4b02273",
+      "name": "Final Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "function cleanText(s) {\n  return (s || \"\")\n    .toLowerCase()\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction makeKey(item) {\n  return cleanText(item.title + \"|\" + item.date + \"|\" + item.venue);\n}\n\n/* =========================\n   LIGHT JUNK FILTER ONLY\n   ========================= */\nfunction isValid(entry) {\n  if (!entry.title || entry.title.trim().length < 5) return false;\n\n  const t = cleanText(\n    entry.title + \" \" + (entry.subtitle || \"\") + \" \" + (entry.snippet || \"\")\n  );\n\n  if (t.length < 10) return false;\n\n  const hardJunk = [\n    \"cookie\",\n    \"subscribe\",\n    \"javascript\",\n    \"enable\",\n    \"access denied\"\n  ];\n\n  return !hardJunk.some(j => t.includes(j));\n}\n\n/* =========================\n   MAIN\n   ========================= */\nconst seen = new Set();\nconst output = [];\n\nfor (const item of items) {\n  const data = item.json.data || item.json.results || [];\n\n  for (const entry of data) {\n\n    if (!isValid(entry)) continue;\n\n    /* =========================\n       DEDUPE ONLY\n       ========================= */\n    const key = makeKey(entry);\n    if (seen.has(key)) continue;\n    seen.add(key);\n\n    output.push({\n      source: entry.source || \"unknown\",\n      title: entry.title || \"\",\n      subtitle: entry.subtitle || \"\",\n      snippet: entry.snippet || \"\",\n      date: entry.date || \"\",\n      venue: entry.venue || \"\"  \n    });\n  }\n}\n\n/* =========================\n   IMPROVED SCORING (CULTURE + DISCOVERY BOOSTED)\n   ========================= */\nfunction score(e) {\n  const t = cleanText(e.title + \" \" + (e.snippet || \"\"));\n\n  let s = 0;\n\n  // NIGHTLIFE\n  if (t.includes(\"reggaeton\")) s += 6;\n  if (t.includes(\"club\")) s += 4;\n  if (t.includes(\"party\")) s += 3;\n  if (t.includes(\"dj\")) s += 3;\n\n  // CULTURE (BOOSTED — FIXES YOUR “LOW ENERGY MISSING” ISSUE)\n  if (t.includes(\"cinema\")) s += 7;\n  if (t.includes(\"exhibition\")) s += 7;\n  if (t.includes(\"museum\")) s += 7;\n  if (t.includes(\"theatre\")) s += 6;\n  if (t.includes(\"art\")) s += 5;\n\n  // LIVE / SOCIAL\n  if (t.includes(\"live\")) s += 3;\n  if (t.includes(\"music\")) s += 3;\n\n  // DISCOVERY SOURCES (IMPORTANT FOR TIMEOUT / FEVER / LATINOLIFE)\n  if (t.includes(\"things to do\")) s += 6;\n  if (t.includes(\"this week\")) s += 5;\n  if (t.includes(\"what's on\")) s += 5;\n\n  return s;\n}\n\noutput.sort((a, b) => score(b) - score(a));\n\n/* =========================\n   IMPORTANT: GIVE CLAUDE MORE ROOM\n   ========================= */\n\nreturn [\n  {\n    json: {\n      totalBefore: items.length,\n      totalAfter: output.length,\n      data: output.slice(0, 60)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2848,
+        608
+      ],
+      "id": "295a7e2d-f5f5-4d82-a4b3-51035cd08c87",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const expanded = [];\n\nfunction push(item) {\n  const { Content, content, html, ...rest } = item;\n  expanded.push(rest);\n}\n\n/* =========================\n   EXPAND TIMEOUT / CURATED LISTS\n   ========================= */\nfunction expandCurated(entry) {\n\n  const text = (entry.title + \" \" + entry.subtitle + \" \" + entry.snippet).toLowerCase();\n\n  // ALWAYS create base\n  push({ ...entry, category: \"culture\" });\n\n  // FORCE MULTIPLE DERIVATIONS (THIS IS THE KEY FIX)\n\n  if (text.includes(\"exhibition\") || text.includes(\"museum\")) {\n    push({ ...entry, category: \"low_energy\", title: \"Museum & Exhibition Pick\" });\n    push({ ...entry, category: \"low_energy\", title: \"Gallery & Culture Walks\" });\n  }\n\n  if (text.includes(\"cinema\") || text.includes(\"film\")) {\n    push({ ...entry, category: \"low_energy\", title: \"Cinema Picks This Week\" });\n    push({ ...entry, category: \"low_energy\", title: \"Cult / Indie Screenings\" });\n  }\n\n  if (text.includes(\"things to do\") || text.includes(\"week\")) {\n    push({ ...entry, category: \"today\", title: \"Top London Things To Do\" });\n    push({ ...entry, category: \"today\", title: \"Editor's Weekly Picks\" });\n    push({ ...entry, category: \"squirrel\", title: \"Hidden Gems This Week\" });\n    push({ ...entry, category: \"weekend\", title: \"Weekend Highlights From Guide\" });\n  }\n\n  // ALWAYS inject “bonus discovery”\n  push({ ...entry, category: \"bonus\", title: \"More from Editorial Guide\" });\n}\n\n/* =========================\n   VENUES (Egg, Brixton, PostBar, etc.)\n   ========================= */\nfunction expandVenue(entry) {\n  const text = entry.snippet || \"\";\n\n  const dates = text.match(\n    /(Mon|Tue|Wed|Thu|Fri|Sat|Sun).*?\\d{1,2}/g\n  ) || [];\n\n  if (dates.length === 0) {\n    push({\n      ...entry,\n      category: \"weekend\"\n    });\n  } else {\n    for (const d of dates.slice(0, 3)) {\n      push({\n        ...entry,\n        category: \"weekend\",\n        snippet: `${entry.snippet || \"\"} | Event scheduled: ${d}`\n      });\n    }\n  }\n}\n\n/* =========================\n   CULTURE ARTICLES (LatinoLife, Metro)\n   ========================= */\nfunction expandArticle(entry) {\n\n  push({ ...entry, category: \"squirrel\" });\n\n  // FORCE MULTIPLE INTERPRETATIONS\n  push({ ...entry, category: \"squirrel\", title: entry.title });\n  push({ ...entry, category: \"bonus\", title: \"Cultural Insight\" });\n  push({ ...entry, category: \"bonus\", title: \"Related Latin Scene Event\" });\n  push({ ...entry, category: \"today\", title: \"Latin Culture Highlight This Week\" });\n}\n\nfunction expandFever(entry) {\n\n  push({ ...entry, category: \"today\" });\n  push({ ...entry, category: \"weekend\" });\n  push({ ...entry, category: \"weekend\" });\n  push({ ...entry, category: \"squirrel\" });\n}\n\n/* =========================\n   MAIN LOOP\n   ========================= */\nfor (const item of items) {\n\n  const data = item.json.data || [];\n\n  for (const entry of data) {\n\n    const src = (entry.source || \"\").toLowerCase();\n\n    if (src.includes(\"timeout\") || src.includes(\"fever\")) {\n      expandCurated(entry);\n      continue;\n    }\n\n    if(src.includes(\"fever\")) {\n      expandFever(entry);\n    }\n\n    if (\n      src.includes(\"egg\") ||\n      src.includes(\"electric\") ||\n      src.includes(\"postbar\") ||\n      src.includes(\"hootananny\") ||\n      src.includes(\"brixton\") ||\n      src.includes(\"jungla\")\n    ) {\n      expandVenue(entry);\n      continue;\n    }\n\n    if (\n      src.includes(\"latinolife\") ||\n      src.includes(\"metro\")\n    ) {\n      expandArticle(entry);\n      continue;\n    }\n\n    /* fallback (NO DATA LOSS) */\n    push({\n      ...entry,\n      category: \"bonus\"\n    });\n  }\n}\n\nreturn [\n  {\n    json: {\n      expandedCount: expanded.length,\n      data: expanded\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2672,
+        608
+      ],
+      "id": "1590c15d-d4c6-443d-a5f6-bd80a4004fbc",
+      "name": "Expand Source Preclaude"
+    },
+    {
+      "parameters": {
+        "jsCode": "const grouped = {\n  TODAY: [],\n  SQUIRREL: [],\n  LOW_ENERGY: [],\n  WEEKEND: [],\n  BONUS: []\n};\n\nfor (const item of $json.data) {\n\n  const t = (item.title + \" \" + item.snippet).toLowerCase();\n\n  if (t.includes(\"party\") || t.includes(\"club\") || t.includes(\"dj\") || t.includes(\"reggaeton\")) {\n    grouped.TODAY.push(item);\n    continue;\n  }\n\n  if (t.includes(\"cinema\") || t.includes(\"exhibition\") || t.includes(\"museum\")) {\n    grouped.LOW_ENERGY.push(item);\n    continue;\n  }\n\n  if (t.includes(\"week\") || t.includes(\"what's on\") || t.includes(\"festival\")) {\n    grouped.WEEKEND.push(item);\n    continue;\n  }\n\n  if (t.includes(\"latino\") || t.includes(\"metro\") || t.includes(\"trend\")) {\n    grouped.SQUIRREL.push(item);\n    continue;\n  }\n\n  grouped.BONUS.push(item);\n}\n\nreturn [{ json: { grouped } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3008,
+        608
+      ],
+      "id": "10af7523-8f59-4ac9-ac5e-cfe4f182fde4",
+      "name": "Group"
+    },
+    {
+      "parameters": {
+        "jsCode": "const flat = [];\nfor (const [section, items] of Object.entries($json.grouped || {})) {\n  for (const item of items || []) {\n    flat.push({ section, ...item });\n  }\n}\nreturn flat;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3168,
+        608
+      ],
+      "id": "99d2a0a5-4c15-4e35-89a5-4feda4e741b3",
+      "name": "Flatten"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (t) =>\n  (t || \"\")\n    .replace(/&#039;/g, \"'\")\n    .replace(/&amp;/g, \"&\")\n    .replace(/\\s+/g, \" \")\n    .slice(0, 120);\n\nconst MAX_ITEMS = 15;\n\nconst results = items.slice(0, MAX_ITEMS).map(({ json }) => ({\n  section: json.section,\n  source: json.source,\n  title: json.title,\n  subtitle: clean(json.subtitle),\n  snippet: clean(json.snippet),  // capped\n  date: json.date,\n  venue: json.venue,  \n}));\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3344,
+        608
+      ],
+      "id": "9ce6d9c7-110b-4580-851f-70ea3e4e0401",
+      "name": "Clean"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cheerio = require('cheerio');\n\nconst expanded = [];\n\nfor (const item of items) {\n  const data = item.json.data || [];\n  \n  for (const entry of data) {\n    const src = (entry.source || \"\").toLowerCase();\n    const html = entry.content || entry.html || entry.Content || \"\";\n    \n    if (!html) {\n      expanded.push({ source: entry.source, title: entry.title || \"Event\", snippet: entry.snippet || \"\", category: \"bonus\" });\n      continue;\n    }\n\n    const $ = cheerio.load(html);\n    $('script, style, nav, footer, header, [class*=\"cookie\"], [class*=\"banner\"], [class*=\"ad\"]').remove();\n\n    // ---- TIMEOUT ----\n    if (src.includes(\"timeout\")) {\n      $('article, [class*=\"card\"], [class*=\"tile\"], [class*=\"editorial\"]').each((i, el) => {\n        const title = $(el).find('h2, h3, h4, [class*=\"title\"]').first().text().trim();\n        const snippet = $(el).find('p, [class*=\"desc\"], [class*=\"summary\"]').first().text().trim();\n        const link = $(el).find('a').first().attr('href') || \"\";\n        if (!title || title.length <= 3) return;\n        if (title === '[title]' || title.includes('[') || !snippet) return;\n        expanded.push({\n          source: entry.source,\n          title,\n          snippet: snippet.substring(0, 200),\n          link: link.startsWith('http') ? link : `https://timeout.com${link}`,\n          category: \"culture\"\n        });\n      });\n      continue;\n    }\n\n    // ---- DICE.FM ----\n    if (src.includes(\"dice\")) {\n      $('[class*=\"event\"], [class*=\"EventCard\"], [class*=\"listing\"], article').each((i, el) => {\n        const title = $(el).find('h2, h3, [class*=\"title\"], [class*=\"name\"]').first().text().trim();\n        const date = $(el).find('[class*=\"date\"], time, [class*=\"when\"]').first().text().trim();\n        const venue = $(el).find('[class*=\"venue\"], [class*=\"location\"]').first().text().trim();\n        if (!title || title.length <= 3) return;\n        if (title.includes('[')) return;\n        expanded.push({\n          source: entry.source,\n          title,\n          snippet: [date, venue].filter(Boolean).join(' | '),\n          category: \"today\"\n        });\n      });\n      continue;\n    }\n\n    // ---- FEVER ----\n    // ---- FEVER (FIXED: JSON-LD FIRST APPROACH) ----\n    if (src.includes(\"fever\")) {    \n      const jsonLdBlocks = [];\n    \n      // 1. COLLECT ALL JSON-LD BLOCKS\n      $('script[type=\"application/ld+json\"]').each((i, el) => {\n        try {\n          const raw = $(el).html();\n          if (!raw) return;\n    \n          const parsed = JSON.parse(raw);\n    \n          // handle arrays or single objects\n          if (Array.isArray(parsed)) {\n            jsonLdBlocks.push(...parsed);\n          } else {\n            jsonLdBlocks.push(parsed);\n          }\n        } catch (e) {\n          // ignore bad JSON blocks\n        }\n      });\n    \n      // 2. EXTRACT EVENTS FROM JSON-LD\n      for (const block of jsonLdBlocks) {\n    \n        // Fever often uses Event schema OR nested graphs\n        const items = block['@graph'] ? block['@graph'] : [block];\n    \n        for (const item of items) {\n    \n          if (!item) continue;\n    \n          const title =\n            item.name ||\n            item.headline ||\n            item.eventName ||\n            \"\";\n    \n          if (!title || title.length < 3) continue;\n    \n          const startDate =\n            item.startDate ||\n            item.start_date ||\n            item.date ||\n            \"\";\n    \n          const venue =\n            item.location?.name ||\n            item.location ||\n            item.address?.name ||\n            \"\";\n    \n          const description =\n            item.description ||\n            item.summary ||\n            item.abstract ||\n            \"\";\n    \n          const snippet = [\n            description,\n            startDate,\n            venue\n          ]\n            .filter(Boolean)\n            .join(\" | \")\n            .replace(/\\s+/g, \" \")\n            .trim();\n    \n          expanded.push({\n            source: entry.source,\n            title: title.trim(),\n            snippet: snippet || \"no-snippet\",\n            date: startDate || \"\",\n            venue: typeof venue === \"string\" ? venue : (venue?.name || \"\"),\n            category: \"weekend\"\n          });\n        }\n      }\n    \n      // 3. FALLBACK (ONLY IF JSON-LD FAILS)\n      if (jsonLdBlocks.length === 0) {       \n      }\n    \n      continue;\n    }\n\n    // ---- LATIN SITES ----\n    if (src.includes(\"latinolife\") || src.includes(\"latin-candy\")) {\n      $('article, [class*=\"post\"], [class*=\"event\"], [class*=\"entry\"]').each((i, el) => {\n        const title = $(el).find('h2, h3, [class*=\"title\"]').first().text().trim();\n        const snippet = $(el).find('p').first().text().trim();\n        const date = $(el).find('[class*=\"date\"], time').first().text().trim();\n        if (!title || title.length <= 3) return;\n        if (title.includes('[')) return;\n        expanded.push({\n          source: entry.source,\n          title,\n          snippet: [date, snippet.substring(0, 150)].filter(Boolean).join(' | '),\n          category: \"squirrel\"\n        });\n      });\n      continue;\n    }\n\n    // ---- SINGLE VENUES ----\n    if (\n      src.includes(\"egg\") || src.includes(\"electric\") ||\n      src.includes(\"postbar\") || src.includes(\"hootananny\") ||\n      src.includes(\"brixton\") || src.includes(\"egglondon\")\n    ) {\n      $('[class*=\"event\"], [class*=\"gig\"], [class*=\"night\"], [class*=\"show\"], article, li').each((i, el) => {\n        const title = $(el).find('h2, h3, h4, [class*=\"title\"], [class*=\"name\"]').first().text().trim();\n        const date = $(el).find('[class*=\"date\"], time, [class*=\"when\"]').first().text().trim();\n        const desc = $(el).find('p, [class*=\"desc\"]').first().text().trim();\n        if (!title || title.length <= 3) return;\n        if (title.includes('[')) return;\n        expanded.push({\n          source: entry.source,\n          title,\n          snippet: [date, desc.substring(0, 150)].filter(Boolean).join(' | '),\n          category: \"weekend\"\n        });\n      });\n      continue;\n    }\n\n    // ---- CINEMAS & THEATRES ----\n    if (\n      src.includes(\"prince\") || src.includes(\"bfi\") ||\n      src.includes(\"garden\") || src.includes(\"etcetera\") ||\n      src.includes(\"lion\") || src.includes(\"cinema\")\n    ) {\n      $('[class*=\"film\"], [class*=\"show\"], [class*=\"event\"], [class*=\"screening\"], [class*=\"production\"], article, li').each((i, el) => {\n        const title = $(el).find('h2, h3, h4, [class*=\"title\"]').first().text().trim();\n        const date = $(el).find('[class*=\"date\"], time, [class*=\"when\"]').first().text().trim();\n        const desc = $(el).find('p, [class*=\"desc\"]').first().text().trim();\n        if (!title || title.length <= 3) return;\n        if (title.includes('[')) return;\n        expanded.push({\n          source: entry.source,\n          title,\n          snippet: [date, desc.substring(0, 150)].filter(Boolean).join(' | '),\n          category: \"low_energy\"\n        });\n      });\n      continue;\n    }\n\n    // ---- FALLBACK ----\n    expanded.push({\n      source: entry.source,\n      title: entry.title || \"Event\",\n      snippet: entry.snippet || \"\",\n      category: \"bonus\"\n    });\n  }\n}\n\nconst deduped = [];\nconst seen = new Set();\n\nfor (const item of expanded) {\n  const key = `${item.source}|${item.title}`;\n\n  if (seen.has(key)) continue;\n  seen.add(key);\n\n  deduped.push(item);\n}\n\nreturn [{\n  json: {\n    expandedCount: deduped.length,\n    data: deduped\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2672,
+        864
+      ],
+      "id": "3a15bda6-ead9-47f4-be80-5b8db99fc23d",
+      "name": "HTML Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = items[0].json.data || [];\n\n// Deduplicate by title\nconst seen = new Set();\nconst deduped = data.filter(item => {\n  const key = item.title.toLowerCase().trim();\n  if (seen.has(key)) return false;\n  seen.add(key);\n  return true;\n});\n\n// Cap at 150 most relevant\nconst capped = deduped.slice(0, 150);\n\nreturn [{\n  json: {\n    expandedCount: capped.length,\n    data: capped\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2848,
+        864
+      ],
+      "id": "fd9efc7c-84ac-4507-900b-8dd88e9707c5",
+      "name": "Filter1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "TimeOut": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LatinoLife": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalize Code": {
+      "main": [
+        [
+          {
+            "node": "Collect All Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Latin Candy": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge A": {
+      "main": [
+        [
+          {
+            "node": "Final Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BFI Southbank": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Etcetera Theatre": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Hootananny Brixton": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge B": {
+      "main": [
+        [
+          {
+            "node": "Final Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Prince Charles Cinema": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "TimeOut",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Latin Candy",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LatinoLife",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "FeverUp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "The Post Bar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Electric Brixton",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Jungla",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Egg London",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "BFI Southbank",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Hootananny Brixton",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prince Charles Cinema",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Etcetera Theatre",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lion & Unicorn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Garden Cinema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FeverUp": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Electric Brixton": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "The Post Bar": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Egg London": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Jungla": {
+      "main": [
+        [
+          {
+            "node": "Merge A",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
+    },
+    "Lion & Unicorn": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Garden Cinema": {
+      "main": [
+        [
+          {
+            "node": "Merge B",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Collect All Data": {
+      "main": [
+        [
+          {
+            "node": "HTML Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Brain": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Merge": {
+      "main": [
+        [
+          {
+            "node": "Normalize Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Debug Dump": {
+      "main": [
+        []
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Group",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expand Source Preclaude": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Group": {
+      "main": [
+        [
+          {
+            "node": "Flatten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten": {
+      "main": [
+        [
+          {
+            "node": "Clean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean": {
+      "main": [
+        [
+          {
+            "node": "Debug Dump",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Parser": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6ff83f1a-6892-41d1-aece-b3d0b755deef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44ebd02f216c7dcb6124927ad7b1778ce5e8e0acf9d6619061783dfeae08dd62"
+  },
+  "id": "tOdHZHxUsdEwbJ0I",
+  "tags": []
+}

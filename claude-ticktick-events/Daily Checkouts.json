@@ -1,0 +1,148 @@
+{
+  "name": "Daily Checkouts",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        160
+      ],
+      "id": "11623c90-4275-4c7e-9b4f-23a9db561738",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4d5299c7-da99-4b6e-9091-da2243c54ee9",
+              "name": "tasks",
+              "value": "Pay rent Reply recruiter Clean gym schedule Fix trading tool idea Random admin crap",
+              "type": "string"
+            },
+            {
+              "id": "6616ef52-f2ea-4c7d-bfb6-51bbc4fdfd62",
+              "name": "events",
+              "value": "Meetup: Shoreditch drinks TimeOut: Comedy night Soho Meetup: AI networking (boring) Street food market 4. Add third field  Click Add Field again:  Name: news Type: String Value: Markets volatile AI regulation UK update Random tech noise 5. Important toggle (don’t miss)  Look for:  👉 “Keep Only Set”  Turn it ON  This ensures clean input to Claude.  6. Save it  Just click anywhere outside — n8n auto-saves.  🧠 What you should now see Manual Trigger → Edit Fields (Set)  with 3 fields inside:  tasks events news ⚡ Next step (this is where it gets interesting)  Now we wire the brain:  👉 Claude HTTP Request node  And you’ll get your first real output like:  “do these 3 things today” “go out here” “ignore this noise”  When you’re ready, say:  👉 “next”  and I’ll guide you click-by-click through the Claude node (no guessing, no config pain).  there is a fields to set string, are you sure i dont set array ?  Good question — this is exactly the kind of detail that trips people up in n8n.  Short answer:  👉 For now: use String (not Array).  🧠 Why String is correct here  We’re doing a prototype / MVP pipeline, not a structured data system yet.  So we want:  quick setup no schema friction easy passing into Claude prompt  Claude is actually better with:  tasks: Pay rent Reply recruiter Clean gym schedule  …as a single string block, not structured JSON.  ⚖️ When you WOULD use Array  Use array only when:  you’re doing filtering inside n8n you need per-item processing you want looping / mapping nodes  Example:  [\"Pay rent\", \"Reply recruiter\"]  That’s useful later for:  TickTick integration per-task scoring deduplication  👉 but NOT needed yet  ⚡ Why string is better for your current goal  Your system right now is:  “Claude acts as a decision engine”  So we want:  ✔ dump raw info ✔ let Claude interpret it ✔ keep n8n simple  If you over-structure now, you’ll slow yourself down.  🧠 Mental model (important)  Think of this as:  n8n = pipe Claude = brain  Right now we are just doing:  TEXT IN → BRAIN → DECISION OUTPUT  Not:  perfect structured database system ⚡ So do this  In “Edit Fields (Set)”:  tasks → String events → String news → String  Turn ON:  Keep Only Set ✔ 🚀 Next step (when ready)  Say:  👉 “next”  and I’ll walk you through:  Claude HTTP node (this is where it becomes powerful)  You’ll go from:  static data  to:  “AI filtering my day in real time”  No fluff, just working system.",
+              "type": "string"
+            },
+            {
+              "id": "fbc719bd-9c50-4ec3-9631-389e9ad95109",
+              "name": "news",
+              "value": "Markets volatile AI regulation UK update Random tech noise",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        160
+      ],
+      "id": "5e20eda5-1423-4941-85a4-37e82e808cc7",
+      "name": "Edit Fields",
+      "alwaysOutputData": true,
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"x-api-key\": \"YOUR_ANTHROPIC_API_KEY\",\n  \"anthropic-version\": \"2023-06-01\",\n  \"content-type\": \"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  model: \"claude-opus-4-7\",\n  max_tokens: 500,\n  messages: [\n    {\n      role: \"user\",\n      content:\n`You are a daily decision engine.\n\nTASKS:\n${$json.tasks}\n\nEVENTS:\n${$json.events}\n\nNEWS:\n${$json.news}\n\nReturn:\n- Top 5 must-do tasks\n- Best event\n- What to ignore\nBe concise.`\n    }\n  ]\n}\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        272,
+        160
+      ],
+      "id": "975f8752-345f-4e18-a486-44cf92b8fa79",
+      "name": "HTTP Request",
+      "alwaysOutputData": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "fromEmail": "zz_zzzz@yahoo.com",
+        "toEmail": "zz_zzzz@yahoo.com",
+        "subject": "=Your day - {{ $now.toFormat('cccc d MMM') }}",
+        "html": "=={{\"<html><body style='font-family:Arial,sans-serif;font-size:14px;max-width:520px;margin:20px auto;padding:16px;color:#333;line-height:1.8'>\" + $json.content[0].text.replace(/\\n/g, \"<br>\") + \"</body></html>\"}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        160
+      ],
+      "id": "2f2a77df-a36a-4a3c-8880-4af8ebe3d80e",
+      "name": "Send an Email",
+      "webhookId": "f0eee426-8ed2-4d4b-8637-8d6dfa97978e",
+      "credentials": {
+        "smtp": {
+          "id": "SqMglLgfOkfuBnJ1",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "64e5c168-43ce-41c6-aab0-db83d4560023",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44ebd02f216c7dcb6124927ad7b1778ce5e8e0acf9d6619061783dfeae08dd62"
+  },
+  "id": "AT7t12dF4dU3XuxK",
+  "tags": []
+}

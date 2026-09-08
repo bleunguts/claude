@@ -1,0 +1,198 @@
+{
+  "name": "London Social + Shows Engine (Clean Spaced)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 600]
+    },
+
+    {
+      "parameters": { "url": "https://www.timeout.com/london/things-to-do/things-to-do-in-london-this-week" },
+      "id": "2",
+      "name": "TimeOut",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 100]
+    },
+    {
+      "parameters": { "url": "https://feverup.com/en/london" },
+      "id": "3",
+      "name": "FeverUp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 250]
+    },
+    {
+      "parameters": { "url": "https://www.meetup.com/home/?suggested=true&source=EVENTS" },
+      "id": "4",
+      "name": "Meetup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 400]
+    },
+    {
+      "parameters": { "url": "https://www.internations.org/events/mine#invitations" },
+      "id": "5",
+      "name": "InterNations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 550]
+    },
+    {
+      "parameters": { "url": "https://www.latinolife.co.uk/what-is-on" },
+      "id": "6",
+      "name": "LatinoLife",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 700]
+    },
+    {
+      "parameters": { "url": "https://dice.fm/venue/jungla-london-bbakv?lng=en" },
+      "id": "7",
+      "name": "Jungla",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 850]
+    },
+    {
+      "parameters": { "url": "https://www.latin-candy.co.uk/" },
+      "id": "8",
+      "name": "Latin Candy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1000]
+    },
+    {
+      "parameters": { "url": "https://egglondon.co.uk/events/" },
+      "id": "9",
+      "name": "Egg London",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1150]
+    },
+    {
+      "parameters": { "url": "https://www.electricbrixton.uk.com/events/" },
+      "id": "10",
+      "name": "Electric Brixton",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1300]
+    },
+    {
+      "parameters": { "url": "https://www.eventbrite.com/d/united-kingdom--london/" },
+      "id": "11",
+      "name": "Eventbrite",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1450]
+    },
+    {
+      "parameters": { "url": "https://www.thepostbar.co.uk/" },
+      "id": "12",
+      "name": "The Post Bar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1600]
+    },
+
+    {
+      "parameters": { "url": "https://www.bfi.org.uk/bfi-southbank" },
+      "id": "13",
+      "name": "BFI Southbank",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 1900]
+    },
+    {
+      "parameters": { "url": "https://princecharlescinema.com/whats-on/" },
+      "id": "14",
+      "name": "Prince Charles Cinema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 2050]
+    },
+    {
+      "parameters": { "url": "https://www.thegardencinema.co.uk/" },
+      "id": "15",
+      "name": "Garden Cinema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 2200]
+    },
+    {
+      "parameters": { "url": "https://www.etceteratheatrecamden.com/events" },
+      "id": "16",
+      "name": "Etcetera Theatre",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 2350]
+    },
+    {
+      "parameters": { "url": "https://www.thelionandunicorntheatre.com/whats-on" },
+      "id": "17",
+      "name": "Lion & Unicorn",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 2500]
+    },
+    {
+      "parameters": { "url": "https://hootanannybrixton.co.uk/" },
+      "id": "18",
+      "name": "Hootananny Brixton",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 2650]
+    },
+
+    {
+      "parameters": {
+        "functionCode": "return items.map(i => ({ json: { raw: i.json } }));"
+      },
+      "id": "19",
+      "name": "Normalize",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [650, 1300]
+    },
+
+    {
+      "parameters": { "mode": "append" },
+      "id": "20",
+      "name": "Merge All",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [950, 1300]
+    },
+
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { data: items.map(i => i.json.raw) } }];"
+      },
+      "id": "21",
+      "name": "Prepare Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [1200, 1300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "jsonParameters": true,
+        "headerParametersJson": "{\n  \"x-api-key\": \"{{YOUR_ANTHROPIC_API_KEY}}\",\n  \"anthropic-version\": \"2023-06-01\"\n}",
+        "bodyParametersJson": "={\n  \"model\": \"claude-sonnet-4-5\",\n  \"max_tokens\": 900,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"You are a London social + shows decision engine. Filter this data.\\n\\nDATA:\\n\" + JSON.stringify($json.data) + \"\\n\\nReturn ONLY: TODAY (max 2), SQUIRREL PICK (1), LOW ENERGY (1), WEEKEND (max 3), IGNORE.\"\n    }\n  ]\n}"
+      },
+      "id": "22",
+      "name": "Claude Brain",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1450, 1300]
+    }
+  ],
+  "connections": {}
+}
