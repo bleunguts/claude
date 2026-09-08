@@ -17,7 +17,7 @@ schema and auth middleware exist.
 
 - [x] Create the repo structure: `server/` and `client/` as separate packages (keeps deploy targets independent)
 - [x] Init `server/` as Node.js + Express with TypeScript; add `tsx`/`ts-node-dev` for hot reload
-- [ ] Add ESLint + Prettier with a shared config, and a `npm run lint` script that CI can call
+- [x] Add ESLint + Prettier with a shared config, and a `npm run lint` script that CI can call
 - [ ] Add a `docker-compose.yml` with a PostgreSQL service so every dev gets the same local database
 - [ ] Install and init Prisma; point `DATABASE_URL` at the local PostgreSQL instance
 - [ ] Create `.env.example` listing every required variable: `DATABASE_URL`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, token TTLs, SMTP/email provider keys, `CLIENT_URL`

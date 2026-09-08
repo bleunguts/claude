@@ -1,5 +1,9 @@
 {
   "name": "welltrack-client",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  }
 }
