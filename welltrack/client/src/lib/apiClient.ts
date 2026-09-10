@@ -22,13 +22,25 @@ export function setAccessToken(token: string | null): void {
   accessToken = token;
 }
 
+// Set by AuthProvider. Attempts a silent token refresh; resolves true if the
+// caller should retry the original request with the new access token.
+let unauthorizedHandler: (() => Promise<boolean>) | null = null;
+
+export function setUnauthorizedHandler(handler: (() => Promise<boolean>) | null): void {
+  unauthorizedHandler = handler;
+}
+
 interface RequestOptions {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   body?: unknown;
   signal?: AbortSignal;
 }
 
-export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
+export async function apiFetch<T>(
+  path: string,
+  options: RequestOptions = {},
+  isRetry = false,
+): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     method: options.method ?? "GET",
     headers: {
@@ -47,9 +59,18 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
 
   if (!res.ok) {
     const body = data as ApiErrorBody | null;
+    const code = body?.error?.code ?? "UNKNOWN_ERROR";
+
+    if (res.status === 401 && code === "UNAUTHORIZED" && !isRetry && unauthorizedHandler) {
+      const shouldRetry = await unauthorizedHandler();
+      if (shouldRetry) {
+        return apiFetch<T>(path, options, true);
+      }
+    }
+
     throw new ApiError(
       res.status,
-      body?.error?.code ?? "UNKNOWN_ERROR",
+      code,
       body?.error?.message ?? res.statusText,
       body?.error?.details,
     );

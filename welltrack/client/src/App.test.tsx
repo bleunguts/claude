@@ -1,20 +1,26 @@
 import { render, screen } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { App } from "./App";
+import { AppRoutes } from "./App";
 
-function renderApp() {
-  const queryClient = new QueryClient();
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>,
-  );
-}
+describe("App routing", () => {
+  it("redirects an unauthenticated visitor from the protected root route to login", async () => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
 
-describe("App", () => {
-  it("renders the dashboard placeholder at the root route", () => {
-    renderApp();
-    expect(screen.getByRole("heading", { name: "Dashboard" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Log in" })).toBeInTheDocument();
+  });
+
+  it("renders the login page directly", async () => {
+    render(
+      <MemoryRouter initialEntries={["/login"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole("heading", { name: "Log in" })).toBeInTheDocument();
   });
 });
