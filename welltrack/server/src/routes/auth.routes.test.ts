@@ -58,7 +58,9 @@ describe("POST /api/auth/register", () => {
   });
 
   it("returns 409 when the service rejects with ConflictError", async () => {
-    vi.mocked(register).mockRejectedValue(new ConflictError("Email is already registered"));
+    vi.mocked(register).mockRejectedValue(
+      new ConflictError("Email is already registered", "EMAIL_IN_USE"),
+    );
 
     const res = await request(app).post("/api/auth/register").send(validBody);
 
@@ -121,7 +123,9 @@ describe("POST /api/auth/login", () => {
   });
 
   it("returns 401 with a generic message when the service rejects with UnauthorizedError", async () => {
-    vi.mocked(login).mockRejectedValue(new UnauthorizedError("Invalid email or password"));
+    vi.mocked(login).mockRejectedValue(
+      new UnauthorizedError("Invalid email or password", "INVALID_CREDENTIALS"),
+    );
 
     const res = await request(app).post("/api/auth/login").send(loginBody);
 
@@ -158,7 +162,9 @@ describe("POST /api/auth/refresh", () => {
   });
 
   it("returns 401 when the service rejects with UnauthorizedError", async () => {
-    vi.mocked(refresh).mockRejectedValue(new UnauthorizedError("Invalid or expired refresh token"));
+    vi.mocked(refresh).mockRejectedValue(
+      new UnauthorizedError("Invalid or expired refresh token", "INVALID_REFRESH_TOKEN"),
+    );
 
     const res = await request(app)
       .post("/api/auth/refresh")
@@ -254,7 +260,7 @@ describe("POST /api/auth/reset-password", () => {
 
   it("returns 400 when the service rejects with BadRequestError", async () => {
     vi.mocked(applyPasswordReset).mockRejectedValue(
-      new BadRequestError("Invalid or expired reset token"),
+      new BadRequestError("Invalid or expired reset token", "INVALID_RESET_TOKEN"),
     );
 
     const res = await request(app).post("/api/auth/reset-password").send(resetBody);
