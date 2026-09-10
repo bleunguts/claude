@@ -110,3 +110,97 @@ Before marking any task as complete:
 - Run specific test file: `npm test -- path/to/test.ts`
 - Run test matching pattern: `npm test -- --grep "pattern"`
 
+## Documentation Requirements
+
+### README.md
+Keep updated with:
+- Quick start instructions (clone, install, run)
+- Environment variables table with descriptions
+- Available npm scripts and what they do
+
+Update README when:
+- Adding new features or endpoints
+- Changing environment variables
+- Adding new npm scripts or dependencies
+
+Add these extra details to README:
+
+Postgres SQL Connection Url:
+https://console.neon.tech/app/projects/curly-meadow-18185174?database=neondb
+
+### Code Comments
+Add comments when:
+- The "why" isn't obvious from the code
+- There's a non-obvious edge case being handled
+- You're working around a bug or limitation
+- The function has complex parameters or return values
+
+Don't add comments when:
+- The code is self-explanatory
+- You'd just be restating what the code does
+
+For exported functions, use JSDoc format:
+/**
+ * Creates a new symptom log for the authenticated user.
+ * @param userId - The ID of the user creating the log
+ * @param data - The symptom log data
+ * @returns The created symptom log with ID
+ * @throws AppError 404 if symptom doesn't exist
+ */
+
+### API Documentation
+Maintain a simple API reference in /docs/api.md with:
+- Endpoint URL and method
+- Brief description
+- Whether auth is required
+- Request body example (if applicable)
+- Success response example
+
+Format example:
+### Create Symptom Log
+POST /api/symptom-logs (requires auth)
+
+Request:
+{
+  "symptomId": "uuid",
+  "severity": 7,
+  "notes": "Started after lunch"
+}
+
+Response: 201 Created
+{
+  "id": "uuid",
+  "symptomId": "uuid",
+  "severity": 7,
+  ...
+}
+
+Curl test commands: 
+curl -k -X POST "http://localhost:3000/api/auth/login"   -H "Content-Type: application/json"   -d '{
+    "email": "sarah@welltrack.com",
+    "password": "securepass123"}'
+
+-- fatigue
+curl -k -X POST "http://localhost:3000/api/symptom-logs" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZWNkY2I4NC02ODM4LTQyMDItODI1ZS0yYWVmYzNmZjA3MDciLCJpYXQiOjE3ODkwNzQxMDAsImV4cCI6MTc4OTA3NTAwMH0.F2xmVXD8WtuwG5dpT4DR9sVhCF2QpyeqHa4b_5mePu8" \
+  -d '{
+    "symptomId": "123e4567-e89b-12d3-a456-426614174000",
+    "severity": 9,
+    "notes": "aNote",
+    "loggedAt": "2026-01-01T00:00:00Z"
+  }'
+
+-- headache
+curl -k -X POST "http://localhost:3000/api/symptom-logs" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZWNkY2I4NC02ODM4LTQyMDItODI1ZS0yYWVmYzNmZjA3MDciLCJpYXQiOjE3ODkwNzUwMjAsImV4cCI6MTc4OTA3NTkyMH0.LJplc7e_theLQp-UNXWRAGI1bgOZsqz0Tmfmbf-BcK0" \
+  -d '{
+    "symptomId": "a19a6212-20ff-4bd8-b8ff-8f1c602faf24",
+    "severity": 9,
+    "notes": "aNote",
+    "loggedAt": "2026-01-01T00:00:00Z"
+  }'
+
+-- GET SYMPTOMS
+curl -k -X GET "http://localhost:3000/api/symptom-logs"   -H "Content-Type: application/json"   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZWNkY2I4NC02ODM4LTQyMDItODI1ZS0yYWVmYzNmZjA3MDciLCJpYXQiOjE3ODkwNzUwMjAsImV4cCI6MTc4OTA3NTkyMH0.LJplc7e_theLQp-UNXWRAGI1bgOZsqz0Tmfmbf-BcK0"
