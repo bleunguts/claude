@@ -1,13 +1,18 @@
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { DashboardSkeleton } from "../components/dashboard/DashboardSkeleton";
 import { QuickAddGrid } from "../components/dashboard/QuickAddGrid";
 import { TodaySummary } from "../components/dashboard/TodaySummary";
 import { WeekProgress } from "../components/dashboard/WeekProgress";
+import { LogEntryModal } from "../components/logging/LogEntryModal";
+import { logTypeRegistry } from "../components/logging/registry";
+import type { LogType } from "../components/logging/types";
 
 export function DashboardPage() {
   const { user } = useAuth();
   const { isLoading, isError, todayCounts, daysLoggedThisWeek } = useDashboardData();
+  const [openType, setOpenType] = useState<LogType | null>(null);
 
   const today = new Intl.DateTimeFormat(undefined, {
     timeZone: user?.timezone,
@@ -36,7 +41,16 @@ export function DashboardPage() {
         </>
       )}
 
-      <QuickAddGrid />
+      <QuickAddGrid onSelect={setOpenType} />
+
+      {openType && (
+        <LogEntryModal
+          isOpen
+          onClose={() => setOpenType(null)}
+          initialType={openType}
+          registry={logTypeRegistry}
+        />
+      )}
     </div>
   );
 }

@@ -41,38 +41,42 @@ const EMPTY_DATA: DashboardData = {
 export function useDashboardData(): DashboardData {
   const { user } = useAuth();
 
-  // Computed once per mount, not per render: these feed the query keys below, and a
-  // fresh `Date.now()` on every render would change the keys every time, causing
-  // TanStack Query to treat each render as a new query and refetch in a tight loop.
-  const { now, startDate, endDate } = useMemo(() => {
+  // `startDate` is memoized once per mount, not per render: it feeds the query keys
+  // below, and a fresh `Date.now()` on every render would change the keys every time,
+  // causing TanStack Query to treat each render as a new query and refetch in a tight
+  // loop. Deliberately no `endDate` bound is sent to the API — an upper bound frozen at
+  // mount time would exclude any log created later in the same session, so a query
+  // invalidated after saving a new log would refetch but still miss it. `now` (used
+  // below only for local-day bucketing, not for the query range) can stay frozen at
+  // mount time without that problem.
+  const { now, startDate } = useMemo(() => {
     const now = new Date();
     return {
       now,
       startDate: new Date(now.getTime() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString(),
-      endDate: now.toISOString(),
     };
   }, []);
-  const params = `startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&limit=200`;
+  const params = `startDate=${encodeURIComponent(startDate)}&limit=200`;
 
   const results = useQueries({
     queries: [
       {
-        queryKey: ["dashboard", "symptom-logs", startDate, endDate],
+        queryKey: ["dashboard", "symptom-logs", startDate],
         queryFn: () => apiFetch<PaginatedResult<SymptomLog>>(`/symptom-logs?${params}`),
         enabled: !!user,
       },
       {
-        queryKey: ["dashboard", "mood-logs", startDate, endDate],
+        queryKey: ["dashboard", "mood-logs", startDate],
         queryFn: () => apiFetch<PaginatedResult<MoodLog>>(`/mood-logs?${params}`),
         enabled: !!user,
       },
       {
-        queryKey: ["dashboard", "medication-logs", startDate, endDate],
+        queryKey: ["dashboard", "medication-logs", startDate],
         queryFn: () => apiFetch<PaginatedResult<MedicationLog>>(`/medication-logs?${params}`),
         enabled: !!user,
       },
       {
-        queryKey: ["dashboard", "habit-logs", startDate, endDate],
+        queryKey: ["dashboard", "habit-logs", startDate],
         queryFn: () => apiFetch<PaginatedResult<HabitLog>>(`/habit-logs?${params}`),
         enabled: !!user,
       },
