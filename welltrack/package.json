@@ -7,7 +7,7 @@
     "lint": "npm run lint --prefix server && npm run lint --prefix client",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "test": "npm run test --prefix server"
+    "test": "npm run test --prefix server && npm run test --prefix client"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
