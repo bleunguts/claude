@@ -72,7 +72,7 @@ export async function register(
 ): Promise<AuthResult> {
   const existing = await client.user.findUnique({ where: { email: input.email } });
   if (existing) {
-    throw new ConflictError("Email is already registered");
+    throw new ConflictError("Email is already registered", "EMAIL_IN_USE");
   }
 
   const passwordHash = await passwordService.hash(input.password);
@@ -90,12 +90,12 @@ export async function login(
 ): Promise<AuthResult> {
   const user = await client.user.findUnique({ where: { email: input.email } });
   if (!user) {
-    throw new UnauthorizedError(INVALID_CREDENTIALS_MESSAGE);
+    throw new UnauthorizedError(INVALID_CREDENTIALS_MESSAGE, "INVALID_CREDENTIALS");
   }
 
   const passwordMatches = await passwordService.compare(input.password, user.passwordHash);
   if (!passwordMatches) {
-    throw new UnauthorizedError(INVALID_CREDENTIALS_MESSAGE);
+    throw new UnauthorizedError(INVALID_CREDENTIALS_MESSAGE, "INVALID_CREDENTIALS");
   }
 
   return issueAuthResult(user, client);
@@ -112,7 +112,7 @@ export async function refresh(
   });
 
   if (!existing || existing.revokedAt || existing.expiresAt < new Date()) {
-    throw new UnauthorizedError("Invalid or expired refresh token");
+    throw new UnauthorizedError("Invalid or expired refresh token", "INVALID_REFRESH_TOKEN");
   }
 
   await client.refreshToken.update({
@@ -164,7 +164,7 @@ export async function applyPasswordReset(
   const existing = await client.passwordResetToken.findUnique({ where: { tokenHash } });
 
   if (!existing || existing.usedAt || existing.expiresAt < new Date()) {
-    throw new BadRequestError("Invalid or expired reset token");
+    throw new BadRequestError("Invalid or expired reset token", "INVALID_RESET_TOKEN");
   }
 
   const passwordHash = await passwordService.hash(input.newPassword);
