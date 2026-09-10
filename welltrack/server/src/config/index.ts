@@ -12,6 +12,7 @@ const configSchema = z.object({
   JWT_REFRESH_SECRET: z.string().min(1, "JWT_REFRESH_SECRET is required"),
   JWT_ACCESS_TTL: z.string().default("15m"),
   JWT_REFRESH_TTL: z.string().default("30d"),
+  PASSWORD_RESET_TOKEN_TTL: z.string().default("1h"),
   SMTP_HOST: emptyToUndefined(z.string()),
   SMTP_PORT: emptyToUndefined(z.coerce.number().int().positive()),
   SMTP_USER: emptyToUndefined(z.string()),
