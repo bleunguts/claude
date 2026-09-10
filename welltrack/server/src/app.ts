@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import symptomRoutes from "./routes/symptom.routes.js";
@@ -6,9 +7,11 @@ import moodLogRoutes from "./routes/moodLog.routes.js";
 import habitRoutes from "./routes/habit.routes.js";
 import medicationRoutes from "./routes/medication.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { config } from "./config/index.js";
 
 export function createApp() {
   const app = express();
+  app.use(cors({ origin: config.CLIENT_URL }));
   app.use(express.json());
 
   app.get("/", (_req, res) => {
