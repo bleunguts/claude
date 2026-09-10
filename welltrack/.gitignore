@@ -5,6 +5,7 @@ npm-debug.log*
 
 # TypeScript build output (server)
 dist/
+*.tsbuildinfo
 
 # Vite build output (client)
 build/
