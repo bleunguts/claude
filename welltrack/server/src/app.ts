@@ -1,6 +1,7 @@
 import express from "express";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import symptomRoutes from "./routes/symptom.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 export function createApp() {
@@ -13,6 +14,7 @@ export function createApp() {
 
   app.use("/api", healthRoutes);
   app.use("/api", authRoutes);
+  app.use("/api", symptomRoutes);
 
   app.use(errorHandler);
 
