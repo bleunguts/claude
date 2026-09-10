@@ -98,15 +98,15 @@ Before marking any task as complete:
 2. Run the full test suite with: `npm test`
 3. If tests fail:
  - Analyze the failure output
- - Fix the code (no the tests, unless tests are incorrect)
+ - Fix the code (not the tests, unless tests are incorrect)
  - Re-run tests until all pass
 4. For API endpoints, include integration tests that verify:
  - Success responses with valid input
  - Authentication requirements
  - Edge cases
 ## Test Commands
-- Backend tests: `cd backend && npm test`
-- Frontend tests: `cd frontend && npm test`
+- Backend tests: `cd server && npm test`
+- Frontend tests: `cd client && npm test`
 - Run specific test file: `npm test -- path/to/test.ts`
 - Run test matching pattern: `npm test -- --grep "pattern"`
 
