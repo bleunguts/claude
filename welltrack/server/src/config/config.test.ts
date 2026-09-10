@@ -29,6 +29,7 @@ describe("loadConfig", () => {
     expect(config.NODE_ENV).toBe("development");
     expect(config.JWT_ACCESS_TTL).toBe("15m");
     expect(config.JWT_REFRESH_TTL).toBe("30d");
+    expect(config.PASSWORD_RESET_TOKEN_TTL).toBe("1h");
   });
 
   it("lets explicit optional values override the defaults", () => {
@@ -38,11 +39,13 @@ describe("loadConfig", () => {
       NODE_ENV: "production",
       JWT_ACCESS_TTL: "5m",
       JWT_REFRESH_TTL: "7d",
+      PASSWORD_RESET_TOKEN_TTL: "30m",
     });
     expect(config.PORT).toBe(4000);
     expect(config.NODE_ENV).toBe("production");
     expect(config.JWT_ACCESS_TTL).toBe("5m");
     expect(config.JWT_REFRESH_TTL).toBe("7d");
+    expect(config.PASSWORD_RESET_TOKEN_TTL).toBe("30m");
   });
 
   it("treats an empty SMTP_PORT as undefined rather than 0", () => {
