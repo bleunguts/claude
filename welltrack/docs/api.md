@@ -1,4 +1,4 @@
-# API Reference: Auth
+# API Reference
 
 Base URL: `http://localhost:3000/api`
 
@@ -184,6 +184,47 @@ curl -k -X POST "http://localhost:3000/api/auth/reset-password" \
     "token": "<reset-token-from-email>",
     "newPassword": "newSecurePass456"
   }'
+```
+
+## User Stats
+
+### Get Stats
+
+GET /api/stats (requires auth)
+
+Aggregated statistics for the authenticated user. All windows and day-boundaries are
+computed in the user's stored `timezone`, not UTC.
+
+Response: 200 OK
+```json
+{
+  "averageMoodScoreLast30Days": 3.5,
+  "topSymptoms": [
+    { "symptomId": "uuid", "name": "Headache", "count": 4 }
+  ],
+  "currentStreakDays": 6,
+  "totalLogsByType": {
+    "symptom": 42,
+    "mood": 18,
+    "medication": 7,
+    "habit": 30
+  }
+}
+```
+
+- `averageMoodScoreLast30Days` — average `moodScore` over the last 30 local calendar
+  days; `null` if there are no mood logs in that window.
+- `topSymptoms` — up to 5 most-logged symptoms over the last 30 local calendar days,
+  sorted by count descending; empty array if none.
+- `currentStreakDays` — consecutive local calendar days, counting backward from today,
+  with at least one log of any type. Reads `0` if nothing has been logged yet today (it
+  does not fall back to counting from yesterday while today is still in progress).
+- `totalLogsByType` — all-time counts per log type, not windowed.
+
+Curl:
+```bash
+curl -k -X GET "http://localhost:3000/api/stats" \
+  -H "Authorization: Bearer <accessToken>"
 ```
 
 ## Notes
