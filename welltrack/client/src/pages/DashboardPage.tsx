@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { DashboardSkeleton } from "../components/dashboard/DashboardSkeleton";
 import { QuickAddGrid } from "../components/dashboard/QuickAddGrid";
+import { StatsCard } from "../components/dashboard/StatsCard";
 import { TodaySummary } from "../components/dashboard/TodaySummary";
 import { WeekProgress } from "../components/dashboard/WeekProgress";
 import { LogEntryModal } from "../components/logging/LogEntryModal";
@@ -40,6 +41,8 @@ export function DashboardPage() {
           <WeekProgress daysLoggedThisWeek={daysLoggedThisWeek} />
         </>
       )}
+
+      <StatsCard />
 
       <QuickAddGrid onSelect={setOpenType} />
 
