@@ -99,6 +99,24 @@ export interface HabitLog {
   createdAt: string;
 }
 
+export interface TopSymptom {
+  symptomId: string;
+  name: string;
+  count: number;
+}
+
+export interface UserStats {
+  averageMoodScoreLast30Days: number | null;
+  topSymptoms: TopSymptom[];
+  currentStreakDays: number;
+  totalLogsByType: {
+    symptom: number;
+    mood: number;
+    medication: number;
+    habit: number;
+  };
+}
+
 export interface PaginatedResult<T> {
   items: T[];
   total: number;

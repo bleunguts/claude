@@ -6,6 +6,7 @@ import symptomRoutes from "./routes/symptom.routes.js";
 import moodLogRoutes from "./routes/moodLog.routes.js";
 import habitRoutes from "./routes/habit.routes.js";
 import medicationRoutes from "./routes/medication.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { config } from "./config/index.js";
 
@@ -24,6 +25,7 @@ export function createApp() {
   app.use("/api", moodLogRoutes);
   app.use("/api", habitRoutes);
   app.use("/api", medicationRoutes);
+  app.use("/api", userRoutes);
 
   app.use(errorHandler);
 
