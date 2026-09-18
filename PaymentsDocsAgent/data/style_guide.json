@@ -1,0 +1,23 @@
+{
+  "voice": {
+    "tone": "Direct, second-person, present-tense. Address the reader as 'you'.",
+    "avoid": ["'we' for the reader", "'should' (use 'must' or rephrase)", "'simply', 'easy', 'just'"]
+  },
+  "structure": {
+    "required_sections_per_doc": ["Overview", "Request", "Response", "Errors"],
+    "code_block_languages": ["python", "bash", "json", "http"]
+  },
+  "terminology": {
+    "preferred": {
+      "charge": "Use 'charge' (not 'payment' or 'transaction') when referring to the /charges resource.",
+      "refund": "Use 'refund' (not 'reversal').",
+      "currency": "Always pair amounts with their currency.",
+      "api_key": "Refer to the credential as an 'API key', never 'API token' or 'secret token'."
+    },
+    "auth_header_naming": "Refer to the authorization header as 'Authorization: Bearer <api_key>'. Older docs may say 'X-API-Key' — this is incorrect and must be updated."
+  },
+  "examples": {
+    "language": "Code examples must use Python with the requests library unless context demands otherwise.",
+    "must_be_runnable": "Examples should reference real endpoint paths and real field names from the current API reference."
+  }
+}

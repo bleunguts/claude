@@ -1,0 +1,624 @@
+using System.Collections.Generic;
+using System.Text.Json;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+using Anthropic.Models.Beta.Messages;
+using Messages = Anthropic.Models.Messages;
+
+namespace Anthropic.Tests.Models.Beta.Messages;
+
+public class BetaContentBlockTest : TestBase
+{
+    [Fact]
+    public void TextValidationWorks()
+    {
+        BetaContentBlock value = new BetaTextBlock()
+        {
+            Citations =
+            [
+                new BetaCitationCharLocation()
+                {
+                    CitedText = "The grass is green. The sky is blue.",
+                    DocumentIndex = 0,
+                    DocumentTitle = "My Document",
+                    EndCharIndex = 0,
+                    FileID = "file_011CNha8iCJcU1wXNR6q4V8w",
+                    StartCharIndex = 0,
+                },
+            ],
+            Text = "text",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void ThinkingValidationWorks()
+    {
+        BetaContentBlock value = new BetaThinkingBlock()
+        {
+            Signature = "signature",
+            Thinking = "thinking",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void RedactedThinkingValidationWorks()
+    {
+        BetaContentBlock value = new BetaRedactedThinkingBlock("data");
+        value.Validate();
+    }
+
+    [Fact]
+    public void ToolUseValidationWorks()
+    {
+        BetaContentBlock value = new BetaToolUseBlock()
+        {
+            ID = "id",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = "x",
+            Caller = new BetaDirectCaller(),
+            ToolsetName = "toolset_name",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void ServerToolUseValidationWorks()
+    {
+        BetaContentBlock value = new BetaServerToolUseBlock()
+        {
+            ID = "srvtoolu_SQfNkl1n_JR_",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = Name.Advisor,
+            Caller = new BetaDirectCaller(),
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void WebSearchToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaWebSearchToolResultBlock()
+        {
+            Content = new BetaWebSearchToolResultError(
+                BetaWebSearchToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+            Caller = new BetaDirectCaller(),
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void WebFetchToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaWebFetchToolResultBlock()
+        {
+            Content = new BetaWebFetchToolResultErrorBlock(
+                BetaWebFetchToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+            Caller = new BetaDirectCaller(),
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void AdvisorToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaAdvisorToolResultBlock()
+        {
+            Content = new BetaAdvisorToolResultError(ErrorCode.MaxUsesExceeded),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void CodeExecutionToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaCodeExecutionToolResultBlock()
+        {
+            Content = new BetaCodeExecutionToolResultError(
+                BetaCodeExecutionToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void BashCodeExecutionToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaBashCodeExecutionToolResultBlock()
+        {
+            Content = new BetaBashCodeExecutionToolResultError(
+                BetaBashCodeExecutionToolResultErrorErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void TextEditorCodeExecutionToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaTextEditorCodeExecutionToolResultBlock()
+        {
+            Content = new BetaTextEditorCodeExecutionToolResultError()
+            {
+                ErrorCode = BetaTextEditorCodeExecutionToolResultErrorErrorCode.InvalidToolInput,
+                ErrorMessage = "error_message",
+            },
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void ToolSearchToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaToolSearchToolResultBlock()
+        {
+            Content = new BetaToolSearchToolResultError()
+            {
+                ErrorCode = BetaToolSearchToolResultErrorErrorCode.InvalidToolInput,
+                ErrorMessage = "error_message",
+            },
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void McpToolUseValidationWorks()
+    {
+        BetaContentBlock value = new BetaMcpToolUseBlock()
+        {
+            ID = "id",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = "name",
+            ServerName = "server_name",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void McpToolResultValidationWorks()
+    {
+        BetaContentBlock value = new BetaMcpToolResultBlock()
+        {
+            Content = "string",
+            IsError = true,
+            ToolUseID = "tool_use_id",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void ContainerUploadValidationWorks()
+    {
+        BetaContentBlock value = new BetaContainerUploadBlock("file_id");
+        value.Validate();
+    }
+
+    [Fact]
+    public void CompactionValidationWorks()
+    {
+        BetaContentBlock value = new BetaCompactionBlock()
+        {
+            Content = "content",
+            EncryptedContent = "encrypted_content",
+            Signature = "signature",
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void FallbackValidationWorks()
+    {
+        BetaContentBlock value = new BetaFallbackBlock()
+        {
+            From = new(Messages::Model.ClaudeFable5_1),
+            To = new(Messages::Model.ClaudeFable5_1),
+            Trigger = new(BetaFallbackRefusalTriggerCategory.Cyber),
+        };
+        value.Validate();
+    }
+
+    [Fact]
+    public void TextSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaTextBlock()
+        {
+            Citations =
+            [
+                new BetaCitationCharLocation()
+                {
+                    CitedText = "The grass is green. The sky is blue.",
+                    DocumentIndex = 0,
+                    DocumentTitle = "My Document",
+                    EndCharIndex = 0,
+                    FileID = "file_011CNha8iCJcU1wXNR6q4V8w",
+                    StartCharIndex = 0,
+                },
+            ],
+            Text = "text",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ThinkingSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaThinkingBlock()
+        {
+            Signature = "signature",
+            Thinking = "thinking",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void RedactedThinkingSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaRedactedThinkingBlock("data");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ToolUseSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaToolUseBlock()
+        {
+            ID = "id",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = "x",
+            Caller = new BetaDirectCaller(),
+            ToolsetName = "toolset_name",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ServerToolUseSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaServerToolUseBlock()
+        {
+            ID = "srvtoolu_SQfNkl1n_JR_",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = Name.Advisor,
+            Caller = new BetaDirectCaller(),
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void WebSearchToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaWebSearchToolResultBlock()
+        {
+            Content = new BetaWebSearchToolResultError(
+                BetaWebSearchToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+            Caller = new BetaDirectCaller(),
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void WebFetchToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaWebFetchToolResultBlock()
+        {
+            Content = new BetaWebFetchToolResultErrorBlock(
+                BetaWebFetchToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+            Caller = new BetaDirectCaller(),
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void AdvisorToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaAdvisorToolResultBlock()
+        {
+            Content = new BetaAdvisorToolResultError(ErrorCode.MaxUsesExceeded),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void CodeExecutionToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaCodeExecutionToolResultBlock()
+        {
+            Content = new BetaCodeExecutionToolResultError(
+                BetaCodeExecutionToolResultErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void BashCodeExecutionToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaBashCodeExecutionToolResultBlock()
+        {
+            Content = new BetaBashCodeExecutionToolResultError(
+                BetaBashCodeExecutionToolResultErrorErrorCode.InvalidToolInput
+            ),
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void TextEditorCodeExecutionToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaTextEditorCodeExecutionToolResultBlock()
+        {
+            Content = new BetaTextEditorCodeExecutionToolResultError()
+            {
+                ErrorCode = BetaTextEditorCodeExecutionToolResultErrorErrorCode.InvalidToolInput,
+                ErrorMessage = "error_message",
+            },
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ToolSearchToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaToolSearchToolResultBlock()
+        {
+            Content = new BetaToolSearchToolResultError()
+            {
+                ErrorCode = BetaToolSearchToolResultErrorErrorCode.InvalidToolInput,
+                ErrorMessage = "error_message",
+            },
+            ToolUseID = "srvtoolu_SQfNkl1n_JR_",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void McpToolUseSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaMcpToolUseBlock()
+        {
+            ID = "id",
+            Input = new Dictionary<string, JsonElement>()
+            {
+                { "foo", JsonSerializer.SerializeToElement("bar") },
+            },
+            Name = "name",
+            ServerName = "server_name",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void McpToolResultSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaMcpToolResultBlock()
+        {
+            Content = "string",
+            IsError = true,
+            ToolUseID = "tool_use_id",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ContainerUploadSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaContainerUploadBlock("file_id");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void CompactionSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaCompactionBlock()
+        {
+            Content = "content",
+            EncryptedContent = "encrypted_content",
+            Signature = "signature",
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void FallbackSerializationRoundtripWorks()
+    {
+        BetaContentBlock value = new BetaFallbackBlock()
+        {
+            From = new(Messages::Model.ClaudeFable5_1),
+            To = new(Messages::Model.ClaudeFable5_1),
+            Trigger = new(BetaFallbackRefusalTriggerCategory.Cyber),
+        };
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaContentBlock>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void UnknownVariantCommonProperties_Works()
+    {
+        BetaContentBlock value = new(
+            JsonSerializer.Deserialize<JsonElement>(
+                """
+                {
+                  "type": "text",
+                  "signature": "signature",
+                  "id": "id",
+                  "tool_use_id": "srvtoolu_SQfNkl1n_JR_"
+                }
+                """
+            )
+        );
+        Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
+
+        JsonElement expectedType = JsonSerializer.SerializeToElement("text");
+        string expectedSignature = "signature";
+        string expectedID = "id";
+        string expectedToolUseID = "srvtoolu_SQfNkl1n_JR_";
+
+        Assert.True(JsonElement.DeepEquals(expectedType, value.Type));
+        Assert.Equal(expectedSignature, value.Signature);
+        Assert.Equal(expectedID, value.ID);
+        Assert.Equal(expectedToolUseID, value.ToolUseID);
+
+        BetaContentBlock emptyValue = new(JsonSerializer.Deserialize<JsonElement>("{}"));
+
+        Assert.Throws<AnthropicInvalidDataException>(() => emptyValue.Type);
+        Assert.Null(emptyValue.Signature);
+        Assert.Null(emptyValue.ID);
+        Assert.Null(emptyValue.ToolUseID);
+
+        BetaContentBlock mismatchedValue = new(
+            JsonSerializer.Deserialize<JsonElement>(
+                """
+                {
+                  "signature": [
+                    "invalid"
+                  ],
+                  "id": [
+                    "invalid"
+                  ],
+                  "tool_use_id": [
+                    "invalid"
+                  ]
+                }
+                """
+            )
+        );
+
+        Assert.Null(mismatchedValue.Signature);
+        Assert.Null(mismatchedValue.ID);
+        Assert.Null(mismatchedValue.ToolUseID);
+    }
+}

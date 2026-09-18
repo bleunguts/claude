@@ -1,0 +1,26 @@
+{
+  "current_version": "v2",
+  "releases": [
+    {
+      "version": "v2",
+      "released": "2026-01-15",
+      "summary": "Major release: new authentication scheme and refund event semantics.",
+      "changes": [
+        "BREAKING: authentication is now `Authorization: Bearer <api_key>`. The legacy `X-API-Key` header is no longer accepted.",
+        "BREAKING: `/charges` request field renamed from `amount_cents` to `amount`. The field still carries the smallest currency unit; only the name changed.",
+        "Added webhook event `payment.refunded` emitted whenever a refund completes.",
+        "Added webhook event `payment.disputed` for dispute lifecycle tracking."
+      ]
+    },
+    {
+      "version": "v1",
+      "released": "2024-08-01",
+      "summary": "Initial public API.",
+      "changes": [
+        "Authentication via `X-API-Key` header.",
+        "Charge creation via `/charges` with `amount_cents` field.",
+        "Refund endpoint added."
+      ]
+    }
+  ]
+}

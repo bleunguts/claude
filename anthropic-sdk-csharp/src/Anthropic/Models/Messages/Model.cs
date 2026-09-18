@@ -1,0 +1,169 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Anthropic.Exceptions;
+using System = System;
+
+namespace Anthropic.Models.Messages;
+
+/// <summary>
+/// The model that will complete your prompt.
+///
+/// <para>See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+/// details and options.</para>
+/// </summary>
+[JsonConverter(typeof(ModelConverter))]
+public enum Model
+{
+    /// <summary>
+    /// Frontier intelligence for ambitious tasks across coding, scientific discovery,
+    /// and enterprise workflows
+    /// </summary>
+    ClaudeFable5_1,
+
+    /// <summary>
+    /// Our most capable model for cybersecurity and biology research, available
+    /// through trusted access programs
+    /// </summary>
+    ClaudeMythos5_1,
+
+    /// <summary>
+    /// High-performance model for coding and agents
+    /// </summary>
+    ClaudeSonnet5,
+
+    /// <summary>
+    /// Next generation of intelligence for the hardest knowledge work and coding problems
+    /// </summary>
+    ClaudeFable5,
+
+    /// <summary>
+    /// Most capable model for cybersecurity and biology research
+    /// </summary>
+    ClaudeMythos5,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus5,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus4_8,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus4_7,
+
+    /// <summary>
+    /// New class of intelligence, strongest in coding and cybersecurity
+    /// </summary>
+    [System::Obsolete(
+        "Will reach end-of-life on June 30, 2026. Please migrate to claude-mythos-5. Visit https://docs.anthropic.com/en/docs/resources/model-deprecations for more information."
+    )]
+    ClaudeMythosPreview,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus4_6,
+
+    /// <summary>
+    /// Best combination of speed and intelligence
+    /// </summary>
+    ClaudeSonnet4_6,
+
+    /// <summary>
+    /// Fastest model with near-frontier intelligence
+    /// </summary>
+    ClaudeHaiku4_5,
+
+    /// <summary>
+    /// Fastest model with near-frontier intelligence
+    /// </summary>
+    ClaudeHaiku4_5_20251001,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus4_5,
+
+    /// <summary>
+    /// Powerful intelligence for long-running agents and coding
+    /// </summary>
+    ClaudeOpus4_5_20251101,
+
+    /// <summary>
+    /// High-performance model for agents and coding
+    /// </summary>
+    ClaudeSonnet4_5,
+
+    /// <summary>
+    /// High-performance model for agents and coding
+    /// </summary>
+    ClaudeSonnet4_5_20250929,
+}
+
+sealed class ModelConverter : JsonConverter<Model>
+{
+    public override Model Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "claude-fable-5-1" => Model.ClaudeFable5_1,
+            "claude-mythos-5-1" => Model.ClaudeMythos5_1,
+            "claude-sonnet-5" => Model.ClaudeSonnet5,
+            "claude-fable-5" => Model.ClaudeFable5,
+            "claude-mythos-5" => Model.ClaudeMythos5,
+            "claude-opus-5" => Model.ClaudeOpus5,
+            "claude-opus-4-8" => Model.ClaudeOpus4_8,
+            "claude-opus-4-7" => Model.ClaudeOpus4_7,
+            "claude-mythos-preview" => Model.ClaudeMythosPreview,
+            "claude-opus-4-6" => Model.ClaudeOpus4_6,
+            "claude-sonnet-4-6" => Model.ClaudeSonnet4_6,
+            "claude-haiku-4-5" => Model.ClaudeHaiku4_5,
+            "claude-haiku-4-5-20251001" => Model.ClaudeHaiku4_5_20251001,
+            "claude-opus-4-5" => Model.ClaudeOpus4_5,
+            "claude-opus-4-5-20251101" => Model.ClaudeOpus4_5_20251101,
+            "claude-sonnet-4-5" => Model.ClaudeSonnet4_5,
+            "claude-sonnet-4-5-20250929" => Model.ClaudeSonnet4_5_20250929,
+            _ => (Model)(-1),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, Model value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                Model.ClaudeFable5_1 => "claude-fable-5-1",
+                Model.ClaudeMythos5_1 => "claude-mythos-5-1",
+                Model.ClaudeSonnet5 => "claude-sonnet-5",
+                Model.ClaudeFable5 => "claude-fable-5",
+                Model.ClaudeMythos5 => "claude-mythos-5",
+                Model.ClaudeOpus5 => "claude-opus-5",
+                Model.ClaudeOpus4_8 => "claude-opus-4-8",
+                Model.ClaudeOpus4_7 => "claude-opus-4-7",
+                Model.ClaudeMythosPreview => "claude-mythos-preview",
+                Model.ClaudeOpus4_6 => "claude-opus-4-6",
+                Model.ClaudeSonnet4_6 => "claude-sonnet-4-6",
+                Model.ClaudeHaiku4_5 => "claude-haiku-4-5",
+                Model.ClaudeHaiku4_5_20251001 => "claude-haiku-4-5-20251001",
+                Model.ClaudeOpus4_5 => "claude-opus-4-5",
+                Model.ClaudeOpus4_5_20251101 => "claude-opus-4-5-20251101",
+                Model.ClaudeSonnet4_5 => "claude-sonnet-4-5",
+                Model.ClaudeSonnet4_5_20250929 => "claude-sonnet-4-5-20250929",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
+    }
+}

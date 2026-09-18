@@ -1,0 +1,418 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using Anthropic.Core;
+using Anthropic.Models.Beta;
+using Anthropic.Models.Beta.Agents;
+using Anthropic.Models.Beta.Sessions;
+
+namespace Anthropic.Tests.Models.Beta.Sessions;
+
+public class SessionUpdateParamsTest : TestBase
+{
+    [Fact]
+    public void FieldRoundtrip_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Agent = new()
+            {
+                McpServers =
+                [
+                    new()
+                    {
+                        Name = "example-mcp",
+                        Type = BetaManagedAgentsUrlMcpServerParamsType.Url,
+                        Url = "https://example-server.modelcontextprotocol.io/sse",
+                    },
+                ],
+                Tools =
+                [
+                    new BetaManagedAgentsAgentToolset20260401Params()
+                    {
+                        Type = BetaManagedAgentsAgentToolset20260401ParamsType.AgentToolset20260401,
+                        Configs =
+                        [
+                            new BetaManagedAgentsBashToolConfigParams()
+                            {
+                                Enabled = true,
+                                PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                    BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                                ),
+                                Type = BetaManagedAgentsBashToolConfigParamsType.Bash,
+                            },
+                        ],
+                        DefaultConfig = new()
+                        {
+                            Enabled = true,
+                            PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                            ),
+                        },
+                    },
+                ],
+            },
+            Budget = new()
+            {
+                MaxListCost = new() { Amount = "2500", Currency = BetaCurrency.Usd },
+                Type = BetaManagedAgentsBudgetLimitType.Limit,
+            },
+            Metadata = new Dictionary<string, string?>() { { "foo", "string" } },
+            Title = "Order #1234 inquiry",
+            VaultIds = ["string"],
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        string expectedSessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7";
+        BetaManagedAgentsSessionAgentUpdate expectedAgent = new()
+        {
+            McpServers =
+            [
+                new()
+                {
+                    Name = "example-mcp",
+                    Type = BetaManagedAgentsUrlMcpServerParamsType.Url,
+                    Url = "https://example-server.modelcontextprotocol.io/sse",
+                },
+            ],
+            Tools =
+            [
+                new BetaManagedAgentsAgentToolset20260401Params()
+                {
+                    Type = BetaManagedAgentsAgentToolset20260401ParamsType.AgentToolset20260401,
+                    Configs =
+                    [
+                        new BetaManagedAgentsBashToolConfigParams()
+                        {
+                            Enabled = true,
+                            PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                            ),
+                            Type = BetaManagedAgentsBashToolConfigParamsType.Bash,
+                        },
+                    ],
+                    DefaultConfig = new()
+                    {
+                        Enabled = true,
+                        PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                            BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                        ),
+                    },
+                },
+            ],
+        };
+        BetaManagedAgentsBudgetLimit expectedBudget = new()
+        {
+            MaxListCost = new() { Amount = "2500", Currency = BetaCurrency.Usd },
+            Type = BetaManagedAgentsBudgetLimitType.Limit,
+        };
+        Dictionary<string, string?> expectedMetadata = new() { { "foo", "string" } };
+        string expectedTitle = "Order #1234 inquiry";
+        List<string> expectedVaultIds = ["string"];
+        List<ApiEnum<string, AnthropicBeta>> expectedBetas =
+        [
+            AnthropicBeta.MessageBatches2024_09_24,
+        ];
+        string expectedWorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy";
+
+        Assert.Equal(expectedSessionID, parameters.SessionID);
+        Assert.Equal(expectedAgent, parameters.Agent);
+        Assert.Equal(expectedBudget, parameters.Budget);
+        Assert.NotNull(parameters.Metadata);
+        Assert.Equal(expectedMetadata.Count, parameters.Metadata.Count);
+        foreach (var item in expectedMetadata)
+        {
+            Assert.True(parameters.Metadata.TryGetValue(item.Key, out var value));
+
+            Assert.Equal(value, parameters.Metadata[item.Key]);
+        }
+        Assert.Equal(expectedTitle, parameters.Title);
+        Assert.NotNull(parameters.VaultIds);
+        Assert.Equal(expectedVaultIds.Count, parameters.VaultIds.Count);
+        for (int i = 0; i < expectedVaultIds.Count; i++)
+        {
+            Assert.Equal(expectedVaultIds[i], parameters.VaultIds[i]);
+        }
+        Assert.NotNull(parameters.Betas);
+        Assert.Equal(expectedBetas.Count, parameters.Betas.Count);
+        for (int i = 0; i < expectedBetas.Count; i++)
+        {
+            Assert.Equal(expectedBetas[i], parameters.Betas[i]);
+        }
+        Assert.Equal(expectedWorkspaceID, parameters.WorkspaceID);
+    }
+
+    [Fact]
+    public void OptionalNonNullableParamsUnsetAreNotSet_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Budget = new()
+            {
+                MaxListCost = new() { Amount = "2500", Currency = BetaCurrency.Usd },
+                Type = BetaManagedAgentsBudgetLimitType.Limit,
+            },
+            Metadata = new Dictionary<string, string?>() { { "foo", "string" } },
+            Title = "Order #1234 inquiry",
+        };
+
+        Assert.Null(parameters.Agent);
+        Assert.False(parameters.RawBodyData.ContainsKey("agent"));
+        Assert.Null(parameters.VaultIds);
+        Assert.False(parameters.RawBodyData.ContainsKey("vault_ids"));
+        Assert.Null(parameters.Betas);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-beta"));
+        Assert.Null(parameters.WorkspaceID);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-workspace-id"));
+    }
+
+    [Fact]
+    public void OptionalNonNullableParamsSetToNullAreNotSet_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Budget = new()
+            {
+                MaxListCost = new() { Amount = "2500", Currency = BetaCurrency.Usd },
+                Type = BetaManagedAgentsBudgetLimitType.Limit,
+            },
+            Metadata = new Dictionary<string, string?>() { { "foo", "string" } },
+            Title = "Order #1234 inquiry",
+
+            // Null should be interpreted as omitted for these properties
+            Agent = null,
+            VaultIds = null,
+            Betas = null,
+            WorkspaceID = null,
+        };
+
+        Assert.Null(parameters.Agent);
+        Assert.False(parameters.RawBodyData.ContainsKey("agent"));
+        Assert.Null(parameters.VaultIds);
+        Assert.False(parameters.RawBodyData.ContainsKey("vault_ids"));
+        Assert.Null(parameters.Betas);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-beta"));
+        Assert.Null(parameters.WorkspaceID);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-workspace-id"));
+    }
+
+    [Fact]
+    public void OptionalNullableParamsUnsetAreNotSet_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Agent = new()
+            {
+                McpServers =
+                [
+                    new()
+                    {
+                        Name = "example-mcp",
+                        Type = BetaManagedAgentsUrlMcpServerParamsType.Url,
+                        Url = "https://example-server.modelcontextprotocol.io/sse",
+                    },
+                ],
+                Tools =
+                [
+                    new BetaManagedAgentsAgentToolset20260401Params()
+                    {
+                        Type = BetaManagedAgentsAgentToolset20260401ParamsType.AgentToolset20260401,
+                        Configs =
+                        [
+                            new BetaManagedAgentsBashToolConfigParams()
+                            {
+                                Enabled = true,
+                                PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                    BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                                ),
+                                Type = BetaManagedAgentsBashToolConfigParamsType.Bash,
+                            },
+                        ],
+                        DefaultConfig = new()
+                        {
+                            Enabled = true,
+                            PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                            ),
+                        },
+                    },
+                ],
+            },
+            VaultIds = ["string"],
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        Assert.Null(parameters.Budget);
+        Assert.False(parameters.RawBodyData.ContainsKey("budget"));
+        Assert.Null(parameters.Metadata);
+        Assert.False(parameters.RawBodyData.ContainsKey("metadata"));
+        Assert.Null(parameters.Title);
+        Assert.False(parameters.RawBodyData.ContainsKey("title"));
+    }
+
+    [Fact]
+    public void OptionalNullableParamsSetToNullAreSetToNull_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Agent = new()
+            {
+                McpServers =
+                [
+                    new()
+                    {
+                        Name = "example-mcp",
+                        Type = BetaManagedAgentsUrlMcpServerParamsType.Url,
+                        Url = "https://example-server.modelcontextprotocol.io/sse",
+                    },
+                ],
+                Tools =
+                [
+                    new BetaManagedAgentsAgentToolset20260401Params()
+                    {
+                        Type = BetaManagedAgentsAgentToolset20260401ParamsType.AgentToolset20260401,
+                        Configs =
+                        [
+                            new BetaManagedAgentsBashToolConfigParams()
+                            {
+                                Enabled = true,
+                                PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                    BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                                ),
+                                Type = BetaManagedAgentsBashToolConfigParamsType.Bash,
+                            },
+                        ],
+                        DefaultConfig = new()
+                        {
+                            Enabled = true,
+                            PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                            ),
+                        },
+                    },
+                ],
+            },
+            VaultIds = ["string"],
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+
+            Budget = null,
+            Metadata = null,
+            Title = null,
+        };
+
+        Assert.Null(parameters.Budget);
+        Assert.True(parameters.RawBodyData.ContainsKey("budget"));
+        Assert.Null(parameters.Metadata);
+        Assert.True(parameters.RawBodyData.ContainsKey("metadata"));
+        Assert.Null(parameters.Title);
+        Assert.True(parameters.RawBodyData.ContainsKey("title"));
+    }
+
+    [Fact]
+    public void Url_Works()
+    {
+        SessionUpdateParams parameters = new() { SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7" };
+
+        var url = parameters.Url(new() { ApiKey = "my-anthropic-api-key" });
+
+        Assert.True(
+            TestBase.UrisEqual(
+                new Uri(
+                    "https://api.anthropic.com/v1/sessions/sesn_011CZkZAtmR3yMPDzynEDxu7?beta=true"
+                ),
+                url
+            )
+        );
+    }
+
+    [Fact]
+    public void AddHeadersToRequest_Works()
+    {
+        HttpRequestMessage requestMessage = new();
+        SessionUpdateParams parameters = new()
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        parameters.AddHeadersToRequest(requestMessage, new() { ApiKey = "my-anthropic-api-key" });
+
+        Assert.Equal(
+            ["managed-agents-2026-04-01", "message-batches-2024-09-24"],
+            requestMessage.Headers.GetValues("anthropic-beta")
+        );
+        Assert.Equal(
+            ["wrkspc_011CZkZaBF1tNoB5wlCeusgy"],
+            requestMessage.Headers.GetValues("anthropic-workspace-id")
+        );
+    }
+
+    [Fact]
+    public void CopyConstructor_Works()
+    {
+        var parameters = new SessionUpdateParams
+        {
+            SessionID = "sesn_011CZkZAtmR3yMPDzynEDxu7",
+            Agent = new()
+            {
+                McpServers =
+                [
+                    new()
+                    {
+                        Name = "example-mcp",
+                        Type = BetaManagedAgentsUrlMcpServerParamsType.Url,
+                        Url = "https://example-server.modelcontextprotocol.io/sse",
+                    },
+                ],
+                Tools =
+                [
+                    new BetaManagedAgentsAgentToolset20260401Params()
+                    {
+                        Type = BetaManagedAgentsAgentToolset20260401ParamsType.AgentToolset20260401,
+                        Configs =
+                        [
+                            new BetaManagedAgentsBashToolConfigParams()
+                            {
+                                Enabled = true,
+                                PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                    BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                                ),
+                                Type = BetaManagedAgentsBashToolConfigParamsType.Bash,
+                            },
+                        ],
+                        DefaultConfig = new()
+                        {
+                            Enabled = true,
+                            PermissionPolicy = new BetaManagedAgentsAlwaysAllowPolicy(
+                                BetaManagedAgentsAlwaysAllowPolicyType.AlwaysAllow
+                            ),
+                        },
+                    },
+                ],
+            },
+            Budget = new()
+            {
+                MaxListCost = new() { Amount = "2500", Currency = BetaCurrency.Usd },
+                Type = BetaManagedAgentsBudgetLimitType.Limit,
+            },
+            Metadata = new Dictionary<string, string?>() { { "foo", "string" } },
+            Title = "Order #1234 inquiry",
+            VaultIds = ["string"],
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        SessionUpdateParams copied = new(parameters);
+
+        Assert.Equal(parameters, copied);
+    }
+}

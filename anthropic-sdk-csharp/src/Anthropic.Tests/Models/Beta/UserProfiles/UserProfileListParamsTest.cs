@@ -1,0 +1,275 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.Json;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+using Anthropic.Models.Beta;
+using Anthropic.Models.Beta.UserProfiles;
+
+namespace Anthropic.Tests.Models.Beta.UserProfiles;
+
+public class UserProfileListParamsTest : TestBase
+{
+    [Fact]
+    public void FieldRoundtrip_Works()
+    {
+        var parameters = new UserProfileListParams
+        {
+            Limit = 0,
+            Order = Order.Asc,
+            OrderBy = OrderBy.CreatedAt,
+            Page = "page",
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        int expectedLimit = 0;
+        ApiEnum<string, Order> expectedOrder = Order.Asc;
+        ApiEnum<string, OrderBy> expectedOrderBy = OrderBy.CreatedAt;
+        string expectedPage = "page";
+        List<ApiEnum<string, AnthropicBeta>> expectedBetas =
+        [
+            AnthropicBeta.MessageBatches2024_09_24,
+        ];
+        string expectedWorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy";
+
+        Assert.Equal(expectedLimit, parameters.Limit);
+        Assert.Equal(expectedOrder, parameters.Order);
+        Assert.Equal(expectedOrderBy, parameters.OrderBy);
+        Assert.Equal(expectedPage, parameters.Page);
+        Assert.NotNull(parameters.Betas);
+        Assert.Equal(expectedBetas.Count, parameters.Betas.Count);
+        for (int i = 0; i < expectedBetas.Count; i++)
+        {
+            Assert.Equal(expectedBetas[i], parameters.Betas[i]);
+        }
+        Assert.Equal(expectedWorkspaceID, parameters.WorkspaceID);
+    }
+
+    [Fact]
+    public void OptionalNonNullableParamsUnsetAreNotSet_Works()
+    {
+        var parameters = new UserProfileListParams { };
+
+        Assert.Null(parameters.Limit);
+        Assert.False(parameters.RawQueryData.ContainsKey("limit"));
+        Assert.Null(parameters.Order);
+        Assert.False(parameters.RawQueryData.ContainsKey("order"));
+        Assert.Null(parameters.OrderBy);
+        Assert.False(parameters.RawQueryData.ContainsKey("order_by"));
+        Assert.Null(parameters.Page);
+        Assert.False(parameters.RawQueryData.ContainsKey("page"));
+        Assert.Null(parameters.Betas);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-beta"));
+        Assert.Null(parameters.WorkspaceID);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-workspace-id"));
+    }
+
+    [Fact]
+    public void OptionalNonNullableParamsSetToNullAreNotSet_Works()
+    {
+        var parameters = new UserProfileListParams
+        {
+            // Null should be interpreted as omitted for these properties
+            Limit = null,
+            Order = null,
+            OrderBy = null,
+            Page = null,
+            Betas = null,
+            WorkspaceID = null,
+        };
+
+        Assert.Null(parameters.Limit);
+        Assert.False(parameters.RawQueryData.ContainsKey("limit"));
+        Assert.Null(parameters.Order);
+        Assert.False(parameters.RawQueryData.ContainsKey("order"));
+        Assert.Null(parameters.OrderBy);
+        Assert.False(parameters.RawQueryData.ContainsKey("order_by"));
+        Assert.Null(parameters.Page);
+        Assert.False(parameters.RawQueryData.ContainsKey("page"));
+        Assert.Null(parameters.Betas);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-beta"));
+        Assert.Null(parameters.WorkspaceID);
+        Assert.False(parameters.RawHeaderData.ContainsKey("anthropic-workspace-id"));
+    }
+
+    [Fact]
+    public void Url_Works()
+    {
+        UserProfileListParams parameters = new()
+        {
+            Limit = 0,
+            Order = Order.Asc,
+            OrderBy = OrderBy.CreatedAt,
+            Page = "page",
+        };
+
+        var url = parameters.Url(new() { ApiKey = "my-anthropic-api-key" });
+
+        Assert.True(
+            TestBase.UrisEqual(
+                new Uri(
+                    "https://api.anthropic.com/v1/user_profiles?beta=true&limit=0&order=asc&order_by=created_at&page=page"
+                ),
+                url
+            )
+        );
+    }
+
+    [Fact]
+    public void AddHeadersToRequest_Works()
+    {
+        HttpRequestMessage requestMessage = new();
+        UserProfileListParams parameters = new()
+        {
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        parameters.AddHeadersToRequest(requestMessage, new() { ApiKey = "my-anthropic-api-key" });
+
+        Assert.Equal(
+            ["user-profiles-2026-08-18", "message-batches-2024-09-24"],
+            requestMessage.Headers.GetValues("anthropic-beta")
+        );
+        Assert.Equal(
+            ["wrkspc_011CZkZaBF1tNoB5wlCeusgy"],
+            requestMessage.Headers.GetValues("anthropic-workspace-id")
+        );
+    }
+
+    [Fact]
+    public void CopyConstructor_Works()
+    {
+        var parameters = new UserProfileListParams
+        {
+            Limit = 0,
+            Order = Order.Asc,
+            OrderBy = OrderBy.CreatedAt,
+            Page = "page",
+            Betas = [AnthropicBeta.MessageBatches2024_09_24],
+            WorkspaceID = "wrkspc_011CZkZaBF1tNoB5wlCeusgy",
+        };
+
+        UserProfileListParams copied = new(parameters);
+
+        Assert.Equal(parameters, copied);
+    }
+}
+
+public class OrderTest : TestBase
+{
+    [Theory]
+    [InlineData(Order.Asc)]
+    [InlineData(Order.Desc)]
+    public void Validation_Works(Order rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, Order> value = rawValue;
+        value.Validate();
+    }
+
+    [Fact]
+    public void InvalidEnumValidationThrows_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, Order>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+
+        Assert.NotNull(value);
+        Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
+    }
+
+    [Theory]
+    [InlineData(Order.Asc)]
+    [InlineData(Order.Desc)]
+    public void SerializationRoundtrip_Works(Order rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, Order> value = rawValue;
+
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, Order>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void InvalidEnumSerializationRoundtrip_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, Order>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, Order>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+}
+
+public class OrderByTest : TestBase
+{
+    [Theory]
+    [InlineData(OrderBy.CreatedAt)]
+    [InlineData(OrderBy.Name)]
+    public void Validation_Works(OrderBy rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, OrderBy> value = rawValue;
+        value.Validate();
+    }
+
+    [Fact]
+    public void InvalidEnumValidationThrows_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, OrderBy>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+
+        Assert.NotNull(value);
+        Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
+    }
+
+    [Theory]
+    [InlineData(OrderBy.CreatedAt)]
+    [InlineData(OrderBy.Name)]
+    public void SerializationRoundtrip_Works(OrderBy rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, OrderBy> value = rawValue;
+
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, OrderBy>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void InvalidEnumSerializationRoundtrip_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, OrderBy>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, OrderBy>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+}

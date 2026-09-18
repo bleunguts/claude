@@ -1,0 +1,108 @@
+using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+
+namespace Anthropic.Models.Messages;
+
+[JsonConverter(typeof(JsonModelConverter<RedactedThinkingBlock, RedactedThinkingBlockFromRaw>))]
+public sealed record class RedactedThinkingBlock : JsonModel
+{
+    /// <summary>
+    /// The contents of this redacted thinking block, returned when portions of the
+    /// model's thinking were safety-redacted. This field is opaque and encrypted,
+    /// with no readable content.
+    ///
+    /// <para>Pass `redacted_thinking` blocks back to the API unchanged when continuing
+    /// a multi-turn conversation.</para>
+    ///
+    /// <para>See [extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking#redacted-thinking-blocks)
+    /// for details.</para>
+    /// </summary>
+    public required string Data
+    {
+        get
+        {
+            this._rawData.Freeze();
+            return this._rawData.GetNotNullClass<string>("data");
+        }
+        init { this._rawData.Set("data", value); }
+    }
+
+    public JsonElement Type
+    {
+        get
+        {
+            this._rawData.Freeze();
+            return this._rawData.GetNotNullStruct<JsonElement>("type");
+        }
+        init { this._rawData.Set("type", value); }
+    }
+
+    /// <inheritdoc/>
+    public override void Validate()
+    {
+        _ = this.Data;
+        if (
+            !JsonElement.DeepEquals(
+                this.Type,
+                JsonSerializer.SerializeToElement("redacted_thinking")
+            )
+        )
+        {
+            throw new AnthropicInvalidDataException("Invalid value given for constant");
+        }
+    }
+
+    public RedactedThinkingBlock()
+    {
+        this.Type = JsonSerializer.SerializeToElement("redacted_thinking");
+    }
+
+#pragma warning disable CS8618
+    [SetsRequiredMembers]
+    public RedactedThinkingBlock(RedactedThinkingBlock redactedThinkingBlock)
+        : base(redactedThinkingBlock) { }
+#pragma warning restore CS8618
+
+    public RedactedThinkingBlock(IReadOnlyDictionary<string, JsonElement> rawData)
+    {
+        this._rawData = new(rawData);
+
+        this.Type = JsonSerializer.SerializeToElement("redacted_thinking");
+    }
+
+#pragma warning disable CS8618
+    [SetsRequiredMembers]
+    RedactedThinkingBlock(FrozenDictionary<string, JsonElement> rawData)
+    {
+        this._rawData = new(rawData);
+    }
+#pragma warning restore CS8618
+
+    /// <inheritdoc cref="RedactedThinkingBlockFromRaw.FromRawUnchecked"/>
+    public static RedactedThinkingBlock FromRawUnchecked(
+        IReadOnlyDictionary<string, JsonElement> rawData
+    )
+    {
+        return new(FrozenDictionary.ToFrozenDictionary(rawData));
+    }
+
+    [SetsRequiredMembers]
+    public RedactedThinkingBlock(string data)
+        : this()
+    {
+        this.Data = data;
+    }
+}
+
+class RedactedThinkingBlockFromRaw : IFromRawJson<RedactedThinkingBlock>
+{
+    /// <inheritdoc/>
+    public RedactedThinkingBlock FromRawUnchecked(
+        IReadOnlyDictionary<string, JsonElement> rawData
+    ) => RedactedThinkingBlock.FromRawUnchecked(rawData);
+}

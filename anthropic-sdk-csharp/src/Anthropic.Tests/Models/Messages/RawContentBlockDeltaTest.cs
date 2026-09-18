@@ -1,0 +1,156 @@
+using System.Text.Json;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+using Anthropic.Models.Messages;
+
+namespace Anthropic.Tests.Models.Messages;
+
+public class RawContentBlockDeltaTest : TestBase
+{
+    [Fact]
+    public void TextValidationWorks()
+    {
+        RawContentBlockDelta value = new TextDelta("text");
+        value.Validate();
+    }
+
+    [Fact]
+    public void InputJsonValidationWorks()
+    {
+        RawContentBlockDelta value = new InputJsonDelta("partial_json");
+        value.Validate();
+    }
+
+    [Fact]
+    public void CitationsValidationWorks()
+    {
+        RawContentBlockDelta value = new CitationsDelta(
+            new Citation(
+                new CitationCharLocation()
+                {
+                    CitedText = "The grass is green. The sky is blue.",
+                    DocumentIndex = 0,
+                    DocumentTitle = "My Document",
+                    EndCharIndex = 0,
+                    FileID = "file_011CNha8iCJcU1wXNR6q4V8w",
+                    StartCharIndex = 0,
+                }
+            )
+        );
+        value.Validate();
+    }
+
+    [Fact]
+    public void ThinkingValidationWorks()
+    {
+        RawContentBlockDelta value = new ThinkingDelta("thinking");
+        value.Validate();
+    }
+
+    [Fact]
+    public void SignatureValidationWorks()
+    {
+        RawContentBlockDelta value = new SignatureDelta("signature");
+        value.Validate();
+    }
+
+    [Fact]
+    public void TextSerializationRoundtripWorks()
+    {
+        RawContentBlockDelta value = new TextDelta("text");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<RawContentBlockDelta>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void InputJsonSerializationRoundtripWorks()
+    {
+        RawContentBlockDelta value = new InputJsonDelta("partial_json");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<RawContentBlockDelta>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void CitationsSerializationRoundtripWorks()
+    {
+        RawContentBlockDelta value = new CitationsDelta(
+            new Citation(
+                new CitationCharLocation()
+                {
+                    CitedText = "The grass is green. The sky is blue.",
+                    DocumentIndex = 0,
+                    DocumentTitle = "My Document",
+                    EndCharIndex = 0,
+                    FileID = "file_011CNha8iCJcU1wXNR6q4V8w",
+                    StartCharIndex = 0,
+                }
+            )
+        );
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<RawContentBlockDelta>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void ThinkingSerializationRoundtripWorks()
+    {
+        RawContentBlockDelta value = new ThinkingDelta("thinking");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<RawContentBlockDelta>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void SignatureSerializationRoundtripWorks()
+    {
+        RawContentBlockDelta value = new SignatureDelta("signature");
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<RawContentBlockDelta>(
+            element,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void UnknownVariantCommonProperties_Works()
+    {
+        RawContentBlockDelta value = new(
+            JsonSerializer.Deserialize<JsonElement>(
+                """
+                {
+                  "type": "text_delta"
+                }
+                """
+            )
+        );
+        Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
+
+        JsonElement expectedType = JsonSerializer.SerializeToElement("text_delta");
+
+        Assert.True(JsonElement.DeepEquals(expectedType, value.Type));
+
+        RawContentBlockDelta emptyValue = new(JsonSerializer.Deserialize<JsonElement>("{}"));
+
+        Assert.Throws<AnthropicInvalidDataException>(() => emptyValue.Type);
+    }
+}

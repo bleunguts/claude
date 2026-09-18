@@ -1,0 +1,314 @@
+using System.Text.Json;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+using Anthropic.Models.Beta.Agents;
+
+namespace Anthropic.Tests.Models.Beta.Agents;
+
+public class BetaManagedAgentsModelConfigTest : TestBase
+{
+    [Fact]
+    public void FieldRoundtrip_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+            Effort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low),
+            InferenceGeo = "inference_geo",
+            Speed = Speed.Standard,
+        };
+
+        ApiEnum<string, BetaManagedAgentsModel> expectedID = BetaManagedAgentsModel.ClaudeOpus5;
+        Effort expectedEffort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low);
+        string expectedInferenceGeo = "inference_geo";
+        ApiEnum<string, Speed> expectedSpeed = Speed.Standard;
+
+        Assert.Equal(expectedID, model.ID);
+        Assert.Equal(expectedEffort, model.Effort);
+        Assert.Equal(expectedInferenceGeo, model.InferenceGeo);
+        Assert.Equal(expectedSpeed, model.Speed);
+    }
+
+    [Fact]
+    public void SerializationRoundtrip_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+            Effort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low),
+            InferenceGeo = "inference_geo",
+            Speed = Speed.Standard,
+        };
+
+        string json = JsonSerializer.Serialize(model, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaManagedAgentsModelConfig>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(model, deserialized);
+    }
+
+    [Fact]
+    public void FieldRoundtripThroughSerialization_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+            Effort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low),
+            InferenceGeo = "inference_geo",
+            Speed = Speed.Standard,
+        };
+
+        string element = JsonSerializer.Serialize(model, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<BetaManagedAgentsModelConfig>(
+            element,
+            ModelBase.SerializerOptions
+        );
+        Assert.NotNull(deserialized);
+
+        ApiEnum<string, BetaManagedAgentsModel> expectedID = BetaManagedAgentsModel.ClaudeOpus5;
+        Effort expectedEffort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low);
+        string expectedInferenceGeo = "inference_geo";
+        ApiEnum<string, Speed> expectedSpeed = Speed.Standard;
+
+        Assert.Equal(expectedID, deserialized.ID);
+        Assert.Equal(expectedEffort, deserialized.Effort);
+        Assert.Equal(expectedInferenceGeo, deserialized.InferenceGeo);
+        Assert.Equal(expectedSpeed, deserialized.Speed);
+    }
+
+    [Fact]
+    public void Validation_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+            Effort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low),
+            InferenceGeo = "inference_geo",
+            Speed = Speed.Standard,
+        };
+
+        model.Validate();
+    }
+
+    [Fact]
+    public void OptionalNonNullablePropertiesUnsetAreNotSet_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig { ID = BetaManagedAgentsModel.ClaudeOpus5 };
+
+        Assert.Null(model.Effort);
+        Assert.False(model.RawData.ContainsKey("effort"));
+        Assert.Null(model.InferenceGeo);
+        Assert.False(model.RawData.ContainsKey("inference_geo"));
+        Assert.Null(model.Speed);
+        Assert.False(model.RawData.ContainsKey("speed"));
+    }
+
+    [Fact]
+    public void OptionalNonNullablePropertiesUnsetValidation_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig { ID = BetaManagedAgentsModel.ClaudeOpus5 };
+
+        model.Validate();
+    }
+
+    [Fact]
+    public void OptionalNonNullablePropertiesSetToNullAreNotSet_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+
+            // Null should be interpreted as omitted for these properties
+            Effort = null,
+            InferenceGeo = null,
+            Speed = null,
+        };
+
+        Assert.Null(model.Effort);
+        Assert.False(model.RawData.ContainsKey("effort"));
+        Assert.Null(model.InferenceGeo);
+        Assert.False(model.RawData.ContainsKey("inference_geo"));
+        Assert.Null(model.Speed);
+        Assert.False(model.RawData.ContainsKey("speed"));
+    }
+
+    [Fact]
+    public void OptionalNonNullablePropertiesSetToNullValidation_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+
+            // Null should be interpreted as omitted for these properties
+            Effort = null,
+            InferenceGeo = null,
+            Speed = null,
+        };
+
+        model.Validate();
+    }
+
+    [Fact]
+    public void CopyConstructor_Works()
+    {
+        var model = new BetaManagedAgentsModelConfig
+        {
+            ID = BetaManagedAgentsModel.ClaudeOpus5,
+            Effort = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low),
+            InferenceGeo = "inference_geo",
+            Speed = Speed.Standard,
+        };
+
+        BetaManagedAgentsModelConfig copied = new(model);
+
+        Assert.Equal(model, copied);
+    }
+}
+
+public class EffortTest : TestBase
+{
+    [Fact]
+    public void BetaManagedAgentsEffortLowValidationWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low);
+        value.Validate();
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortMediumValidationWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortMedium(BetaManagedAgentsEffortMediumType.Medium);
+        value.Validate();
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortHighValidationWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortHigh(BetaManagedAgentsEffortHighType.High);
+        value.Validate();
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortXhighValidationWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortXhigh(BetaManagedAgentsEffortXhighType.Xhigh);
+        value.Validate();
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortMaxValidationWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortMax(BetaManagedAgentsEffortMaxType.Max);
+        value.Validate();
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortLowSerializationRoundtripWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortLow(BetaManagedAgentsEffortLowType.Low);
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<Effort>(element, ModelBase.SerializerOptions);
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortMediumSerializationRoundtripWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortMedium(BetaManagedAgentsEffortMediumType.Medium);
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<Effort>(element, ModelBase.SerializerOptions);
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortHighSerializationRoundtripWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortHigh(BetaManagedAgentsEffortHighType.High);
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<Effort>(element, ModelBase.SerializerOptions);
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortXhighSerializationRoundtripWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortXhigh(BetaManagedAgentsEffortXhighType.Xhigh);
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<Effort>(element, ModelBase.SerializerOptions);
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void BetaManagedAgentsEffortMaxSerializationRoundtripWorks()
+    {
+        Effort value = new BetaManagedAgentsEffortMax(BetaManagedAgentsEffortMaxType.Max);
+        string element = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<Effort>(element, ModelBase.SerializerOptions);
+
+        Assert.Equal(value, deserialized);
+    }
+}
+
+public class SpeedTest : TestBase
+{
+    [Theory]
+    [InlineData(Speed.Standard)]
+    [InlineData(Speed.Fast)]
+    public void Validation_Works(Speed rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, Speed> value = rawValue;
+        value.Validate();
+    }
+
+    [Fact]
+    public void InvalidEnumValidationThrows_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, Speed>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+
+        Assert.NotNull(value);
+        Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
+    }
+
+    [Theory]
+    [InlineData(Speed.Standard)]
+    [InlineData(Speed.Fast)]
+    public void SerializationRoundtrip_Works(Speed rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, Speed> value = rawValue;
+
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, Speed>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void InvalidEnumSerializationRoundtrip_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, Speed>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, Speed>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+}

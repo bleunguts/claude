@@ -1,0 +1,395 @@
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Anthropic;
+using Anthropic.Core;
+using Anthropic.Exceptions;
+using Anthropic.Services;
+using Beta = Anthropic.Services.Beta;
+
+namespace Anthropic.Bedrock;
+
+/// <summary>
+/// An Anthropic client that authenticates via the AWS Bedrock Mantle gateway.
+/// Supports both Anthropic API key mode and AWS SigV4 mode. Only the Messages
+/// resource (and its subpaths) is available — other resources will throw
+/// <see cref="NotSupportedException"/>.
+/// </summary>
+/// <remarks>
+/// See <see cref="MantleAwsClientOptions"/> for auth precedence, region resolution,
+/// and base URL resolution.
+/// </remarks>
+public sealed class AnthropicBedrockMantleClient : AnthropicClient
+{
+    /// <inheritdoc/>
+    protected override bool ShouldAutoResolveCredentials => false;
+
+    private readonly MantleAwsClientOptions _awsOptions;
+
+    /// <summary>
+    /// Creates a new <see cref="AnthropicBedrockMantleClient"/>.
+    /// </summary>
+    /// <param name="options">
+    /// Configuration options for authentication, region, and base URL.
+    /// When <c>null</c>, all values are resolved from environment variables and the
+    /// default AWS credential chain.
+    /// </param>
+    public AnthropicBedrockMantleClient(MantleAwsClientOptions? options = null)
+        : base(options?.ClientOptions ?? new ClientOptions())
+    {
+        var opts = options ?? new MantleAwsClientOptions();
+
+        var resolvedRegion =
+            opts.AwsRegion
+            ?? Environment.GetEnvironmentVariable("AWS_REGION")
+            ?? Environment.GetEnvironmentVariable("AWS_DEFAULT_REGION");
+
+        bool useSigV4;
+        string? resolvedApiKey = null;
+
+        // Always suppress the base client's ANTHROPIC_API_KEY / ANTHROPIC_AUTH_TOKEN
+        // env vars: neither is an auth source for Bedrock Mantle, and an ambient bearer
+        // token would double the SigV4 / gateway Authorization header.
+        ApiKey = null;
+        AuthToken = null;
+
+        if (opts.SkipAuth)
+        {
+            useSigV4 = false;
+        }
+        // Auth precedence
+        else if (opts.ApiKey != null)
+        {
+            useSigV4 = false;
+            resolvedApiKey = opts.ApiKey;
+        }
+        else if (opts.AwsAccessKey != null && opts.AwsSecretAccessKey != null)
+        {
+            useSigV4 = true;
+        }
+        else if (opts.AwsProfile != null)
+        {
+            useSigV4 = true;
+        }
+        else
+        {
+            var envApiKey =
+                Environment.GetEnvironmentVariable("AWS_BEARER_TOKEN_BEDROCK")
+                ?? Environment.GetEnvironmentVariable("ANTHROPIC_AWS_API_KEY");
+            if (envApiKey != null)
+            {
+                useSigV4 = false;
+                resolvedApiKey = envApiKey;
+            }
+            else
+            {
+                useSigV4 = true;
+            }
+        }
+
+        // Base URL: explicit option > env var > derived from region
+        var resolvedBaseUrl =
+            opts.BaseUrl
+            ?? Environment.GetEnvironmentVariable("ANTHROPIC_BEDROCK_MANTLE_BASE_URL")
+            ?? (
+                resolvedRegion != null
+                    ? $"https://bedrock-mantle.{resolvedRegion}.api.aws/anthropic"
+                    : null
+            );
+
+        if (resolvedBaseUrl != null)
+        {
+            BaseUrl = resolvedBaseUrl;
+        }
+        else
+        {
+            throw new AnthropicInvalidDataException(
+                "No base URL could be determined. Set the BaseUrl option, "
+                    + "the ANTHROPIC_BEDROCK_MANTLE_BASE_URL environment variable, or provide a region via "
+                    + "AwsRegion / AWS_REGION / AWS_DEFAULT_REGION."
+            );
+        }
+
+        // A local (rather than the field) so the factory closure below doesn't
+        // capture and pin the whole client.
+        var awsOptions = new MantleAwsClientOptions
+        {
+            SkipAuth = opts.SkipAuth,
+            UseSigV4 = useSigV4,
+            AwsRegion = resolvedRegion,
+            AwsAccessKey = opts.AwsAccessKey,
+            AwsSecretAccessKey = opts.AwsSecretAccessKey,
+            AwsSessionToken = opts.AwsSessionToken,
+            AwsProfile = opts.AwsProfile,
+            ResolvedApiKey = resolvedApiKey,
+        };
+        _awsOptions = awsOptions;
+
+        BackendAdaptationHandler = () => new MantleAwsAdaptationHandler(awsOptions);
+    }
+
+    private AnthropicBedrockMantleClient(MantleAwsClientOptions awsOptions, ClientOptions options)
+        : base(options)
+    {
+        _awsOptions = awsOptions;
+        // The options normally carry the backend adaptation handler from the original
+        // construction; restore it if a WithOptions modifier returned fresh options.
+        BackendAdaptationHandler ??= () => new MantleAwsAdaptationHandler(awsOptions);
+    }
+
+    /// <inheritdoc />
+    public override IAnthropicClient WithOptions(Func<ClientOptions, ClientOptions> modifier)
+    {
+        return new AnthropicBedrockMantleClient(_awsOptions, modifier(_options));
+    }
+
+    /// <summary>
+    /// Not supported on Bedrock Mantle. Only Messages (and Beta.Messages) are available.
+    /// </summary>
+    /// <exception cref="NotSupportedException">Always thrown.</exception>
+    public new IModelService Models =>
+        throw new NotSupportedException(
+            "The Models resource is not supported on Bedrock Mantle. "
+                + "Only Messages and Beta.Messages are available."
+        );
+
+    /// <summary>
+    /// Not supported on Bedrock Mantle. Only Messages (and Beta.Messages) are available.
+    /// </summary>
+    /// <exception cref="NotSupportedException">Always thrown.</exception>
+    public new IFileService Files =>
+        throw new NotSupportedException(
+            "The Files resource is not supported on Bedrock Mantle. "
+                + "Only Messages and Beta.Messages are available."
+        );
+
+    /// <summary>
+    /// Not supported on Bedrock Mantle. Only Messages (and Beta.Messages) are available.
+    /// </summary>
+    /// <exception cref="NotSupportedException">Always thrown.</exception>
+    public new ISkillService Skills =>
+        throw new NotSupportedException(
+            "The Skills resource is not supported on Bedrock Mantle. "
+                + "Only Messages and Beta.Messages are available."
+        );
+
+    /// <summary>
+    /// Beta resources. Only <c>Messages</c> is available; accessing <c>Models</c>,
+    /// <c>Files</c>, or <c>Skills</c> will throw <see cref="NotSupportedException"/>.
+    /// </summary>
+    public new IBetaService Beta => new RestrictedBetaService(base.Beta);
+
+    #region Restricted Beta Wrappers
+
+    private sealed class RestrictedBetaService : IBetaService
+    {
+        private readonly IBetaService _inner;
+
+        public RestrictedBetaService(IBetaService inner) => _inner = inner;
+
+        public IBetaServiceWithRawResponse WithRawResponse =>
+            new RestrictedBetaServiceWithRawResponse(_inner.WithRawResponse);
+
+        public IBetaService WithOptions(Func<ClientOptions, ClientOptions> modifier) =>
+            new RestrictedBetaService(_inner.WithOptions(modifier));
+
+        public Beta::IMessageService Messages => _inner.Messages;
+
+        public Beta::IModelService Models =>
+            throw new NotSupportedException(
+                "The Beta.Models resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IFileService Files =>
+            throw new NotSupportedException(
+                "The Beta.Files resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ISkillService Skills =>
+            throw new NotSupportedException(
+                "The Beta.Skills resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IAgentService Agents =>
+            throw new NotSupportedException(
+                "The Beta.Agents resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IEnvironmentService Environments =>
+            throw new NotSupportedException(
+                "The Beta.Environments resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ISessionService Sessions =>
+            throw new NotSupportedException(
+                "The Beta.Sessions resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IVaultService Vaults =>
+            throw new NotSupportedException(
+                "The Beta.Vaults resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IMemoryStoreService MemoryStores =>
+            throw new NotSupportedException(
+                "The Beta.MemoryStores resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IUserProfileService UserProfiles =>
+            throw new NotSupportedException(
+                "The Beta.UserProfiles resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IWebhookService Webhooks =>
+            throw new NotSupportedException(
+                "The Beta.Webhooks resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDeploymentService Deployments =>
+            throw new NotSupportedException(
+                "The Beta.Deployments resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDeploymentRunService DeploymentRuns =>
+            throw new NotSupportedException(
+                "The Beta.DeploymentRuns resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDreamService Dreams =>
+            throw new NotSupportedException(
+                "The Beta.Dreams resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ITunnelService Tunnels =>
+            throw new NotSupportedException(
+                "The Beta.Tunnels resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IOrganizationService Organization =>
+            throw new NotSupportedException(
+                "The Beta.Organization resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+    }
+
+    private sealed class RestrictedBetaServiceWithRawResponse : IBetaServiceWithRawResponse
+    {
+        private readonly IBetaServiceWithRawResponse _inner;
+
+        public RestrictedBetaServiceWithRawResponse(IBetaServiceWithRawResponse inner) =>
+            _inner = inner;
+
+        public IBetaServiceWithRawResponse WithOptions(
+            Func<ClientOptions, ClientOptions> modifier
+        ) => new RestrictedBetaServiceWithRawResponse(_inner.WithOptions(modifier));
+
+        public Beta::IMessageServiceWithRawResponse Messages => _inner.Messages;
+
+        public Beta::IModelServiceWithRawResponse Models =>
+            throw new NotSupportedException(
+                "The Beta.Models resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IFileServiceWithRawResponse Files =>
+            throw new NotSupportedException(
+                "The Beta.Files resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ISkillServiceWithRawResponse Skills =>
+            throw new NotSupportedException(
+                "The Beta.Skills resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IAgentServiceWithRawResponse Agents =>
+            throw new NotSupportedException(
+                "The Beta.Agents resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IEnvironmentServiceWithRawResponse Environments =>
+            throw new NotSupportedException(
+                "The Beta.Environments resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ISessionServiceWithRawResponse Sessions =>
+            throw new NotSupportedException(
+                "The Beta.Sessions resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IVaultServiceWithRawResponse Vaults =>
+            throw new NotSupportedException(
+                "The Beta.Vaults resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IMemoryStoreServiceWithRawResponse MemoryStores =>
+            throw new NotSupportedException(
+                "The Beta.MemoryStores resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IUserProfileServiceWithRawResponse UserProfiles =>
+            throw new NotSupportedException(
+                "The Beta.UserProfiles resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IWebhookServiceWithRawResponse Webhooks =>
+            throw new NotSupportedException(
+                "The Beta.Webhooks resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDeploymentServiceWithRawResponse Deployments =>
+            throw new NotSupportedException(
+                "The Beta.Deployments resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDeploymentRunServiceWithRawResponse DeploymentRuns =>
+            throw new NotSupportedException(
+                "The Beta.DeploymentRuns resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IDreamServiceWithRawResponse Dreams =>
+            throw new NotSupportedException(
+                "The Beta.Dreams resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::ITunnelServiceWithRawResponse Tunnels =>
+            throw new NotSupportedException(
+                "The Beta.Tunnels resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+
+        public Beta::IOrganizationServiceWithRawResponse Organization =>
+            throw new NotSupportedException(
+                "The Beta.Organization resource is not supported on Bedrock Mantle. "
+                    + "Only Messages and Beta.Messages are available."
+            );
+    }
+
+    #endregion
+}

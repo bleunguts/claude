@@ -1,0 +1,324 @@
+[
+  {
+    "type": "SystemMessage",
+    "subtype": "init",
+    "data": {
+      "type": "system",
+      "subtype": "init",
+      "cwd": "C:\\Dev\\projects\\GitHub\\claude\\PaymentsDocsAgent",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "tools": [
+        "Task",
+        "AskUserQuestion",
+        "CronCreate",
+        "CronDelete",
+        "CronList",
+        "DesignSync",
+        "EnterPlanMode",
+        "EnterWorktree",
+        "ExitPlanMode",
+        "ExitWorktree",
+        "Glob",
+        "Grep",
+        "Monitor",
+        "PushNotification",
+        "Read",
+        "ScheduleWakeup",
+        "Skill",
+        "TaskCreate",
+        "TaskGet",
+        "TaskList",
+        "TaskOutput",
+        "TaskStop",
+        "TaskUpdate",
+        "ToolSearch",
+        "WebFetch",
+        "WebSearch",
+        "Workflow"
+      ],
+      "mcp_servers": [],
+      "model": "claude-haiku-4-5-20251001",
+      "permissionMode": "default",
+      "slash_commands": [
+        "deep-research",
+        "design-sync",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "loop",
+        "claude-api",
+        "run",
+        "run-skill-generator",
+        "clear",
+        "compact",
+        "context",
+        "heapdump",
+        "init",
+        "reload-skills",
+        "review",
+        "security-review",
+        "usage",
+        "insights",
+        "goal",
+        "team-onboarding"
+      ],
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "claude_code_version": "2.1.167",
+      "output_style": "default",
+      "agents": [
+        "claude",
+        "Explore",
+        "general-purpose",
+        "Plan",
+        "statusline-setup"
+      ],
+      "skills": [
+        "deep-research",
+        "design-sync",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "loop",
+        "claude-api",
+        "run",
+        "run-skill-generator"
+      ],
+      "plugins": [],
+      "analytics_disabled": false,
+      "product_feedback_disabled": true,
+      "uuid": "f46cd674-ddd1-40ba-a9ca-e1a59d47a077",
+      "memory_paths": {
+        "auto": "C:\\Users\\HP ENVY\\.claude\\projects\\C--Dev-projects-GitHub-claude\\memory\\"
+      },
+      "fast_mode_state": "off"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 1,
+      "max_retries": 10,
+      "retry_delay_ms": 621.8487105448422,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "1cd8023d-60dc-4720-b537-803124b7faff"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 2,
+      "max_retries": 10,
+      "retry_delay_ms": 1234.061737591709,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "3bd7fada-7c7c-4372-bd34-840bd765b9da"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 3,
+      "max_retries": 10,
+      "retry_delay_ms": 2040.1413453018672,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "2df26f53-19fa-4f17-9b25-23c6c2b1a621"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 4,
+      "max_retries": 10,
+      "retry_delay_ms": 4580.735864039606,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "110f42b7-3d6f-4b17-b6dc-b2397aeffa72"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 5,
+      "max_retries": 10,
+      "retry_delay_ms": 9767.461175413679,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "cb4e280c-e7f8-414a-8fcb-1327ed91790c"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 6,
+      "max_retries": 10,
+      "retry_delay_ms": 18373.70848883043,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "b0b1b178-9e06-4190-b5a8-3926718af397"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 7,
+      "max_retries": 10,
+      "retry_delay_ms": 35101.16005741067,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "818bb10e-f912-4be7-ae7c-70fbe40d6fb8"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 8,
+      "max_retries": 10,
+      "retry_delay_ms": 37895.11095921656,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "84ca80db-cbe2-466c-a09b-9f8e34174833"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 9,
+      "max_retries": 10,
+      "retry_delay_ms": 39737.74219765328,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "150c8f77-70d4-41a9-86ee-078bcc4ec3e3"
+    }
+  },
+  {
+    "type": "SystemMessage",
+    "subtype": "api_retry",
+    "data": {
+      "type": "system",
+      "subtype": "api_retry",
+      "attempt": 10,
+      "max_retries": 10,
+      "retry_delay_ms": 33492.22493758167,
+      "error_status": 401,
+      "error": "authentication_failed",
+      "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+      "uuid": "95a55bbf-37f8-49f2-b8ae-d1ee3df4d220"
+    }
+  },
+  {
+    "type": "AssistantMessage",
+    "content": [
+      {
+        "text": "Failed to authenticate. API Error: 401 API key is invalid."
+      }
+    ],
+    "model": "<synthetic>",
+    "parent_tool_use_id": null,
+    "error": "authentication_failed",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": null,
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": null,
+      "iterations": null,
+      "speed": null
+    },
+    "message_id": "26b7b72c-2981-4040-8bd5-e56a2ae21537",
+    "stop_reason": "stop_sequence",
+    "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+    "uuid": "0edb4d08-3aa8-4f85-a246-0de14953c9ea"
+  },
+  {
+    "type": "ResultMessage",
+    "subtype": "success",
+    "duration_ms": 184741,
+    "duration_api_ms": 0,
+    "is_error": true,
+    "num_turns": 1,
+    "session_id": "ef1724f3-6b5b-401d-b393-8d52b4efdb30",
+    "stop_reason": "stop_sequence",
+    "total_cost_usd": 0,
+    "usage": {
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 0,
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "",
+      "iterations": [],
+      "speed": "standard"
+    },
+    "result": "Failed to authenticate. API Error: 401 API key is invalid.",
+    "structured_output": null,
+    "model_usage": {},
+    "permission_denials": [],
+    "deferred_tool_use": null,
+    "errors": null,
+    "api_error_status": 401,
+    "uuid": "3af943b8-2e28-4216-a1e2-42781ff35839"
+  }
+]

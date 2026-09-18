@@ -1,0 +1,54 @@
+{
+  "api_version": "v2",
+  "base_url": "https://api.fictional-payments.example/v2",
+  "auth": {
+    "scheme": "Bearer",
+    "header": "Authorization",
+    "format": "Bearer <api_key>"
+  },
+  "endpoints": [
+    {
+      "path": "/charges",
+      "method": "POST",
+      "description": "Create a new charge against a customer's payment method.",
+      "request_fields": [
+        {"name": "amount", "type": "integer", "required": true, "description": "Charge amount in the smallest currency unit (e.g., cents for USD)."},
+        {"name": "currency", "type": "string", "required": true, "description": "ISO 4217 currency code, lowercased (e.g., 'usd')."},
+        {"name": "customer_id", "type": "string", "required": true, "description": "Identifier of the customer to charge."},
+        {"name": "description", "type": "string", "required": false, "description": "Arbitrary string describing the charge."}
+      ],
+      "response_fields": [
+        {"name": "id", "type": "string", "description": "Unique identifier for the charge."},
+        {"name": "amount", "type": "integer", "description": "The amount charged."},
+        {"name": "currency", "type": "string", "description": "The currency."},
+        {"name": "status", "type": "string", "description": "One of: pending, succeeded, failed."}
+      ]
+    },
+    {
+      "path": "/charges/{id}/refunds",
+      "method": "POST",
+      "description": "Refund a charge in full or in part.",
+      "request_fields": [
+        {"name": "amount", "type": "integer", "required": false, "description": "Amount to refund. Omit for a full refund."},
+        {"name": "reason", "type": "string", "required": false, "description": "Optional reason for the refund."}
+      ],
+      "response_fields": [
+        {"name": "id", "type": "string"},
+        {"name": "charge_id", "type": "string"},
+        {"name": "amount", "type": "integer"},
+        {"name": "status", "type": "string"}
+      ]
+    },
+    {
+      "path": "/webhooks",
+      "method": "POST",
+      "description": "Subscribe to webhook events. Events: charge.succeeded, charge.failed, payment.refunded, payment.disputed."
+    }
+  ],
+  "events": [
+    {"name": "charge.succeeded", "description": "A charge has succeeded."},
+    {"name": "charge.failed", "description": "A charge failed."},
+    {"name": "payment.refunded", "description": "A refund has been issued."},
+    {"name": "payment.disputed", "description": "A payment has been disputed by the customer."}
+  ]
+}
